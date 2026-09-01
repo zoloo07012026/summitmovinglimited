@@ -1,0 +1,35 @@
+---
+import { getEntry, render } from 'astro:content';
+import PageLayout from '../layouts/PageLayout.astro';
+
+const entry = await getEntry('legal', 'privacy');
+if (!entry) throw new Error('Missing src/content/legal/privacy.md');
+const { Content } = await render(entry);
+
+const updated = entry.data.lastUpdated.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
+---
+
+<PageLayout
+  title={entry.data.title}
+  description={entry.data.seoDescription}
+  active="company"
+>
+  <section class="legal-hero">
+    <div class="wrap">
+      <div class="eyebrow">{entry.data.eyebrow}</div>
+      <h1>{entry.data.title}</h1>
+    </div>
+  </section>
+
+  <section class="legal-content">
+    <div class="wrap">
+      <p class="legal-updated">Last updated: {updated}</p>
+      <div class="legal-body"><Content /></div>
+    </div>
+  </section>
+</PageLayout>

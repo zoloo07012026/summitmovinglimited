@@ -66,3 +66,9 @@ ul {
   margin: 0 auto;
   padding: 0 28px;
 }
+
+@media (max-width: 640px) {
+  .wrap {
+    padding: 0 20px;
+  }
+}

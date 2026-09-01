@@ -1,0 +1,44 @@
+---
+import SiteMeta from '../components/SiteMeta.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import type { NavKey } from '../lib/nav';
+
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/buttons.css';
+
+/**
+ * The shell for every page. Deliberately does NOT import interior.css.
+ *
+ * On the old site index.html and page.css never loaded together, and several
+ * rules differ between them (.section padding 64 vs 68, .eyebrow 14px/.08em vs
+ * 13px/.1em, .cta-band photo vs flat gradient). Merging them into one global
+ * sheet would silently restyle the home page, so that isolation is preserved:
+ * the home page uses this layout directly with component-scoped styles, and the
+ * interior pages go through PageLayout, which adds interior.css.
+ */
+interface Props {
+  title: string;
+  description: string;
+  titleOverride?: string;
+  ogImage?: string;
+  noindex?: boolean;
+  active?: NavKey;
+}
+
+const { active, ...meta } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <SiteMeta {...meta} />
+    <slot name="head" />
+  </head>
+  <body>
+    <Header active={active} />
+    <slot />
+    <Footer />
+  </body>
+</html>
