@@ -4,9 +4,20 @@ import PageLayout from '../layouts/PageLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import CheckCard from '../components/CheckCard.astro';
 import CtaBand from '../components/CtaBand.astro';
+import JsonLd from '../components/JsonLd.astro';
 import { guidePage } from '../lib/pages';
+import { howToNode } from '../lib/seo';
 
 const steps = (await getCollection('steps')).sort((a, b) => a.data.order - b.data.order);
+
+const howTo = howToNode(
+  guidePage.hero.heading,
+  guidePage.seo.description,
+  steps.map((step) => ({
+    title: step.data.guideTitle ?? step.data.title,
+    description: step.data.guideDescription ?? step.data.description,
+  }))
+);
 ---
 
 <PageLayout
@@ -14,6 +25,8 @@ const steps = (await getCollection('steps')).sort((a, b) => a.data.order - b.dat
   description={guidePage.seo.description}
   active="guide"
 >
+  <JsonLd slot="head" title={guidePage.seo.title} nodes={[howTo]} />
+
   <PageHero hero={guidePage.hero} panel={guidePage.panel} strong={`${steps.length} steps`} />
 
   <section class="section">

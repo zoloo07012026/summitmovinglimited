@@ -3,6 +3,7 @@ import PageLayout from '../../layouts/PageLayout.astro';
 import FeaturedPost from '../../components/FeaturedPost.astro';
 import PostCard from '../../components/PostCard.astro';
 import BlogSidebar from '../../components/BlogSidebar.astro';
+import JsonLd from '../../components/JsonLd.astro';
 import { blogPage } from '../../lib/pages';
 import { publishedPosts } from '../../lib/blog';
 
@@ -17,6 +18,8 @@ const rest = posts.filter((p) => p !== featured);
   active="blog"
   mainClass="blog-page"
 >
+  <JsonLd slot="head" title={blogPage.seo.title} />
+
   <section class="section">
     <div class="wrap blog-shell">
       <div class="blog-main">

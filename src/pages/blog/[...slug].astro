@@ -3,7 +3,9 @@ import { getCollection, render } from 'astro:content';
 import PageLayout from '../../layouts/PageLayout.astro';
 import BlogSidebar from '../../components/BlogSidebar.astro';
 import CtaBand from '../../components/CtaBand.astro';
+import JsonLd from '../../components/JsonLd.astro';
 import { blogPage } from '../../lib/pages';
+import { blogPostingNode } from '../../lib/seo';
 import { publishedPosts, formatDate, type Post } from '../../lib/blog';
 
 /**
@@ -30,6 +32,12 @@ const siblings = await publishedPosts();
   active="blog"
   mainClass="blog-page"
 >
+  <JsonLd
+    slot="head"
+    title={post.data.title}
+    nodes={(base, url) => [blogPostingNode(base, url, post.data)]}
+  />
+
   <section class="page-hero post-hero">
     <div class="wrap">
       <div class="eyebrow">{post.data.category}</div>

@@ -4,7 +4,9 @@ import PageLayout from '../layouts/PageLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import ServiceTiles from '../components/ServiceTiles.astro';
 import CtaBand from '../components/CtaBand.astro';
+import JsonLd from '../components/JsonLd.astro';
 import { servicesPage } from '../lib/pages';
+import { servicesListNode } from '../lib/seo';
 
 const all = await getCollection('services');
 const byOrder = (a: (typeof all)[number], b: (typeof all)[number]) =>
@@ -16,6 +18,13 @@ const support = all.filter((s) => s.data.group === 'support').sort(byOrder);
 // The panel used to read a hardcoded "10 services". Counting the collection
 // means adding a service can never leave the headline lying.
 const headline = `${all.length} services`;
+
+const schemaServices = [...core, ...support].map((s) => ({
+  id: s.id,
+  title: s.data.title,
+  summary: s.data.summary,
+  tag: s.data.tag,
+}));
 ---
 
 <PageLayout
@@ -24,6 +33,12 @@ const headline = `${all.length} services`;
   active="services"
   mainClass="services-page"
 >
+  <JsonLd
+    slot="head"
+    title={servicesPage.seo.title}
+    nodes={(base, url) => [servicesListNode(base, url, schemaServices)]}
+  />
+
   <PageHero
     hero={servicesPage.hero}
     panel={servicesPage.panel}

@@ -1,0 +1,43 @@
+---
+import { websiteNode, businessNode, breadcrumbNode, type JsonLdNode } from '../lib/seo';
+
+/**
+ * One <script type="application/ld+json"> per page, holding a @graph.
+ *
+ * Every page carries the WebSite and the business; the business is the same
+ * node with the same @id everywhere, so search engines see one entity rather
+ * than seven copies that might disagree.
+ *
+ * Pages add their own nodes through `nodes`: FAQPage, HowTo, ItemList,
+ * BlogPosting.
+ */
+interface Props {
+  /** The page's own title, used as the last breadcrumb. */
+  title: string;
+  /**
+   * A function so pages can build absolute URLs without each of them having to
+   * reconstruct the site origin from Astro.site.
+   */
+  nodes?: JsonLdNode[] | ((base: URL, url: URL) => JsonLdNode[]);
+}
+
+const { title, nodes = [] } = Astro.props;
+
+const base = new URL(Astro.site ?? 'https://summitmovingltd.com');
+const url = new URL(Astro.url.pathname, base);
+
+const graph: JsonLdNode[] = [websiteNode(base), businessNode(base)];
+
+const crumbs = breadcrumbNode(base, url, title);
+if (crumbs) graph.push(crumbs);
+
+graph.push(...(typeof nodes === 'function' ? nodes(base, url) : nodes));
+
+/* Escaped so a "</script>" inside any copy cannot close the tag early. */
+const json = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(
+  /</g,
+  '\\u003c'
+);
+---
+
+<script type="application/ld+json" is:inline set:html={json} />

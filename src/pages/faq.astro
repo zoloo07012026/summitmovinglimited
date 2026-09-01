@@ -4,7 +4,9 @@ import PageLayout from '../layouts/PageLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import FaqList from '../components/FaqList.astro';
 import CtaBand from '../components/CtaBand.astro';
+import JsonLd from '../components/JsonLd.astro';
 import { faqPage } from '../lib/pages';
+import { faqPageNode } from '../lib/seo';
 
 const items = (await getCollection('faq')).sort((a, b) => a.data.order - b.data.order);
 ---
@@ -14,6 +16,12 @@ const items = (await getCollection('faq')).sort((a, b) => a.data.order - b.data.
   description={faqPage.seo.description}
   active="company"
 >
+  <JsonLd
+    slot="head"
+    title={faqPage.seo.title}
+    nodes={[faqPageNode(items.map((i) => i.data))]}
+  />
+
   <PageHero hero={faqPage.hero} panel={faqPage.panel} />
   <FaqList items={items} />
   <CtaBand cta={faqPage.cta} sectionClass="alt" />
