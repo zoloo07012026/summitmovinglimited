@@ -75,6 +75,41 @@ const steps = defineCollection({
     }),
 });
 
+/**
+ * Blog posts. Every seeded entry ships with `draft: true` and an empty body:
+ * the ten cards on the old blog.html were headlines with nothing behind them
+ * (each <a> pointed at "#"), so publishing them as-is would have shipped ten
+ * empty pages. They are here as CMS starting points, to be written and
+ * published one at a time.
+ *
+ * `image` is a plain path string, not the image() helper: blog images arrive
+ * through the CMS into public/assets/uploads, which astro:assets cannot
+ * process. .post-image fixes the box at 164px with object-fit:cover, so there
+ * is no layout shift regardless of what gets uploaded.
+ *
+ * The view counts the old page showed (721, 310, 258, ...) are deliberately
+ * absent. They were invented, and there is nothing to count them with.
+ */
+const blog = defineCollection({
+  loader: glob({ base: './src/content/blog', pattern: '*.md' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    /** Falls back to description when blank. */
+    seoDescription: z.string().optional(),
+    pubDate: z.coerce.date(),
+    /** Should match one of site.json's blogCategories; drives the sidebar counts. */
+    category: z.string(),
+    /** Free text, e.g. "9 min". Blank simply omits it from the meta row. */
+    readingTime: z.string().optional(),
+    image: z.string().optional(),
+    imageAlt: z.string().default(''),
+    /** At most one. The newest wins if several are flagged. */
+    featured: z.boolean().default(false),
+    draft: z.boolean().default(true),
+  }),
+});
+
 const legal = defineCollection({
   loader: glob({ base: './src/content/legal', pattern: '*.md' }),
   schema: z.object({
@@ -85,4 +120,4 @@ const legal = defineCollection({
   }),
 });
 
-export const collections = { services, faq, steps, legal };
+export const collections = { services, faq, steps, blog, legal };

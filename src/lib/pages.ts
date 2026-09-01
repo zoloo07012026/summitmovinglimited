@@ -3,8 +3,14 @@ import { z } from 'astro/zod';
 import rawServices from '../data/pages/services.json';
 import rawFaq from '../data/pages/faq.json';
 import rawGuide from '../data/pages/guide.json';
+import rawBlog from '../data/pages/blog.json';
 
-import { ServicesPageSchema, FaqPageSchema, GuidePageSchema } from './schema';
+import {
+  ServicesPageSchema,
+  FaqPageSchema,
+  GuidePageSchema,
+  BlogPageSchema,
+} from './schema';
 
 /**
  * The one-off page copy in src/data/pages/, validated the same way site.ts
@@ -25,3 +31,4 @@ function parse<S extends z.ZodTypeAny>(schema: S, raw: unknown, file: string): z
 export const servicesPage = parse(ServicesPageSchema, rawServices, 'src/data/pages/services.json');
 export const faqPage = parse(FaqPageSchema, rawFaq, 'src/data/pages/faq.json');
 export const guidePage = parse(GuidePageSchema, rawGuide, 'src/data/pages/guide.json');
+export const blogPage = parse(BlogPageSchema, rawBlog, 'src/data/pages/blog.json');

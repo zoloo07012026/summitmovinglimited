@@ -1,0 +1,33 @@
+{
+  "seo": {
+    "title": "Blog",
+    "description": "Moving advice from Summit Moving Limited: Chicago-area move planning, long-distance timing, packing order, and how to compare quotes."
+  },
+  "heading": {
+    "eyebrow": "Featured Post",
+    "title": "Moving advice for cleaner, calmer relocations.",
+    "text": "Practical guides for Chicago-area moves, long-distance planning, packing decisions, and move-day timing."
+  },
+  "empty": {
+    "heading": "New guides are on the way.",
+    "text": "We are writing up what our crews actually deal with on Chicago-area moves. In the meantime, the moving guide covers the timeline from quote to delivery.",
+    "label": "Read the moving guide",
+    "href": "/moving-guide/"
+  },
+  "sidebar": {
+    "searchHeading": "Search",
+    "searchPlaceholder": "Search blog posts...",
+    "areasHeading": "Service Areas",
+    "areasLinkLabel": "View all service areas ->",
+    "areasLinkHref": "/services/",
+    "ratingHeading": "Customer Reviews",
+    "ratingLabel": "Average rating",
+    "popularHeading": "Popular Services",
+    "categoriesHeading": "Categories"
+  },
+  "postCta": {
+    "heading": "Planning a move like this one?",
+    "text": "Send us your route, date, and home size and we will map out what it takes.",
+    "label": "Get a Free Quote"
+  }
+}

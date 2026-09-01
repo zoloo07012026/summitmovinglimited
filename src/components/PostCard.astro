@@ -1,0 +1,31 @@
+---
+import { postHref, formatDate, type Post } from '../lib/blog';
+
+/**
+ * A post tile in the /blog/ grid.
+ *
+ * The old cards showed a third meta value -- 310, 258, 202 -- presented as
+ * view counts. Nothing counted them, so they are gone rather than reproduced.
+ */
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { title, description, category, image, imageAlt, readingTime, pubDate } = post.data;
+---
+
+<a class="post-card" href={postHref(post)}>
+  <div class="post-image">
+    <span class="post-badge">{category}</span>
+    {image && <img src={image} alt={imageAlt} loading="lazy" decoding="async" />}
+  </div>
+  <div class="post-body">
+    <h3>{title}</h3>
+    <p>{description}</p>
+    <div class="post-meta">
+      <span>{formatDate(pubDate)}</span>
+      {readingTime && <span>{readingTime}</span>}
+    </div>
+  </div>
+</a>

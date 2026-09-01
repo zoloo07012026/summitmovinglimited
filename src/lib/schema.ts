@@ -141,6 +141,43 @@ export const FaqPageSchema = z.object({
   cta: CtaSchema,
 });
 
+/** The sidebar's fixed labels. The lists themselves come from site.json. */
+export const BlogSidebarSchema = z.object({
+  searchHeading: z.string(),
+  searchPlaceholder: z.string(),
+  areasHeading: z.string(),
+  areasLinkLabel: z.string(),
+  areasLinkHref: z.string(),
+  ratingHeading: z.string(),
+  ratingLabel: z.string(),
+  popularHeading: z.string(),
+  categoriesHeading: z.string(),
+});
+
+export type BlogSidebar = z.infer<typeof BlogSidebarSchema>;
+
+export const BlogPageSchema = z.object({
+  seo: SeoSchema,
+  heading: z.object({
+    eyebrow: z.string(),
+    title: z.string(),
+    text: z.string(),
+  }),
+  /**
+   * Shown while every post is still a draft. This is a real state, not an
+   * error: the seeded posts have no bodies until someone writes them.
+   */
+  empty: z.object({
+    heading: z.string(),
+    text: z.string(),
+    label: z.string(),
+    href: z.string(),
+  }),
+  sidebar: BlogSidebarSchema,
+  /** Closes an individual post. */
+  postCta: CtaSchema,
+});
+
 export const GuidePageSchema = z.object({
   seo: SeoSchema,
   hero: PageHeroSchema,
