@@ -1,0 +1,66 @@
+/*
+ * Design tokens. The union of the two :root blocks the old site carried
+ * (index.html's inline <style> and page.css) -- they were identical apart from
+ * index.html additionally declaring --radius, --card-bg and the --image-* set.
+ *
+ * Loaded globally by BaseLayout so both the home page and the interior pages
+ * see the same values. Everything that actually DIVERGED between those two
+ * stylesheets stays out of here; see interior.css and the `.is-interior` scope.
+ */
+:root {
+  --navy: #0c1b3a;
+  --blue: #1e5fd9;
+  --blue-light: #3b7bf5;
+  --blue-pale: #eaf1ff;
+  --orange: #ff751f;
+  --orange-dark: #e96312;
+  --grey-700: #475569;
+  --grey-500: #64748b;
+  --grey-200: #e2e8f0;
+  --grey-100: #f1f5f9;
+  --white: #ffffff;
+  --radius: 14px;
+  --shadow-sm: 0 1px 2px rgba(12, 27, 58, 0.06);
+  --shadow-md: 0 8px 24px rgba(12, 27, 58, 0.08);
+  --shadow-lg: 0 24px 60px rgba(12, 27, 58, 0.14);
+  --card-bg: rgba(255, 255, 255, 0.94);
+  --card-border: #dbe4f0;
+
+  /*
+   * The fixed header's height lived as three hand-synced numbers across two
+   * files (:host height, header height, and [id] scroll-margin-top). One token
+   * now drives all three: 112 + 12 = 124 and 76 + 12 = 88, the values the old
+   * site hardcoded.
+   */
+  --header-h: 112px;
+  --header-gap: 12px;
+
+  /*
+   * Vertical rhythm differs between the home page and the interior pages
+   * (64px vs 68px). That was an accident of the two stylesheets never loading
+   * together; it is preserved deliberately -- interior.css overrides this
+   * under `.is-interior` rather than the two silently unifying.
+   */
+  --section-y: 64px;
+
+  /*
+   * Background images used via CSS url(). These cannot go through
+   * astro:assets, so they are pre-compressed in public/assets/bg/.
+   * The originals were remote Unsplash fetches for --image-services and
+   * --image-how; they are self-hosted now.
+   */
+  --image-hero: url('/assets/bg/hero.jpg');
+  --image-services: url('/assets/bg/services.jpg');
+  --image-how: url('/assets/bg/how.jpg');
+  --image-why: url('/assets/bg/why.jpg');
+  --image-cta: url('/assets/bg/cta.jpg');
+  /* --image-boxes was a byte-identical duplicate of --image-services and is
+     only used by the testimonials marquee; it lives in Testimonials.astro.
+     --image-home was declared but never referenced, and is gone. */
+}
+
+@media (max-width: 640px) {
+  :root {
+    --header-h: 76px;
+  }
+}
