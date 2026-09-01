@@ -1,0 +1,855 @@
+# Sveltia CMS configuration.
+#
+# Three rules that must survive every future edit of this file:
+#
+# 1. base_url is the Netlify OAuth relay's ORIGIN and nothing else. Writing
+#    https://api.netlify.com/auth here is the single most common way to end up
+#    with a login popup that opens and then hangs. The path goes in
+#    auth_endpoint.
+#
+# 2. Every field that exists in a managed file must be declared below. A field
+#    the CMS does not know about is dropped when that file is saved, so an
+#    undeclared field is silent data loss rather than a harmless omission.
+#
+# 3. No YAML anchors or merge keys. The repetition below is deliberate: this is
+#    the only tool for editing the site, and a config that fails to parse locks
+#    everyone out of it.
+#
+# Any figure a person could invent -- move counts, ratings, years in business,
+# on-time percentage -- is optional here and currently left empty, which the
+# site renders as an em-dash. That is a decision, not an oversight.
+
+backend:
+  name: github
+  repo: zoloo07012026/summitmovinglimited
+  branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+# Editing against a local clone. Sveltia needs no proxy server for this: run
+# `npm run dev`, open http://localhost:4321/admin/ in Chrome or Edge, and pick
+# the repository folder when the browser asks for it.
+local_backend: true
+
+site_url: https://summitmovingltd.com
+display_url: https://summitmovingltd.com
+logo_url: https://summitmovingltd.com/favicon-192.png
+
+# Images added here are served as they are uploaded; they do not go through
+# the build-time image optimiser. Keep them a sensible size. The four process
+# photos are the exception and set their own folder on the field.
+media_folder: public/assets/uploads
+public_folder: /assets/uploads
+
+collections:
+  # ======================================================== Site settings ===
+  - name: settings
+    label: Site Settings
+    files:
+      - name: business
+        label: Business Details
+        file: src/data/site.json
+        description: Phone, address, hours, and the lists used in the footer and blog sidebar.
+        fields:
+          - name: businessName
+            label: Business Name
+            widget: string
+          - name: phone
+            label: Phone Number
+            widget: string
+            hint: 'Appears in the header, footer and quote form. The tel: link is built from it, so write it the way it should read.'
+          - name: email
+            label: Email Address
+            widget: string
+          - name: address
+            label: Address
+            widget: object
+            fields:
+              - { name: street, label: Street, widget: string }
+              - { name: city, label: City, widget: string }
+              - { name: state, label: State, widget: string }
+              - { name: zip, label: ZIP Code, widget: string }
+          - name: hours
+            label: Opening Hours
+            label_singular: Row
+            widget: list
+            summary: '{{fields.label}} - {{fields.value}}'
+            hint: These also become the opening hours in the search-engine markup.
+            fields:
+              - name: label
+                label: Days
+                widget: string
+                hint: 'e.g. "Mon - Fri" or "Saturday"'
+              - name: value
+                label: Hours
+                widget: string
+                hint: 'e.g. "8:00 AM - 7:00 PM"'
+              - { name: closed, label: Closed, widget: boolean, default: false }
+          - name: social
+            label: Social Links
+            label_singular: Link
+            widget: list
+            summary: '{{fields.network}}'
+            fields:
+              - name: network
+                label: Network
+                widget: select
+                options: [facebook, instagram]
+              - name: url
+                label: URL
+                widget: string
+                required: false
+                default: ''
+                hint: Leave empty and the icon stays hidden rather than linking nowhere.
+          - name: footerBlurb
+            label: Footer Blurb
+            widget: text
+          - name: copyrightName
+            label: Copyright Name
+            widget: string
+          - name: serviceAreas
+            label: Service Areas
+            widget: list
+            field: { name: area, label: Area, widget: string }
+            hint: Shown in the blog sidebar.
+          - name: popularServices
+            label: Popular Services
+            widget: list
+            field: { name: service, label: Service, widget: string }
+            hint: Shown in the blog sidebar.
+          - name: blogCategories
+            label: Blog Categories
+            widget: list
+            field: { name: category, label: Category, widget: string }
+            hint: A post's category must match one of these exactly or the sidebar will not count it.
+          - name: rating
+            label: Customer Rating
+            widget: object
+            required: false
+            hint: Leave both empty until there is a verified average. While empty the site shows a dash and publishes no rating markup, which is what you want - marking up a rating that cannot be verified risks a Google penalty.
+            fields:
+              - { name: value, label: Average Rating, widget: string, required: false }
+              - { name: count, label: Number of Reviews, widget: number, value_type: int, required: false }
+
+      - name: forms
+        label: Quote Form
+        file: src/data/forms.json
+        description: Where quote requests are sent, and every label on the form.
+        fields:
+          - name: endpoint
+            label: Formspree Endpoint
+            widget: string
+            hint: The full URL Formspree gave you. Changing it changes where requests are delivered.
+          - { name: subject, label: Email Subject, widget: string }
+          - { name: heading, label: Form Heading, widget: string }
+          - { name: sub, label: Form Subheading, widget: string }
+          - name: stepLabels
+            label: Step Labels
+            widget: list
+            field: { name: label, label: Label, widget: string }
+            hint: One per step. The form has as many steps as there are labels here.
+          - { name: nextLabel, label: 'Button: Next', widget: string }
+          - { name: submitLabel, label: 'Button: Submit', widget: string }
+          - { name: sendingLabel, label: 'Button: Sending', widget: string }
+          - { name: secureNote, label: Note Under the Form, widget: string }
+          - { name: successHeading, label: 'Success: Heading', widget: string }
+          - { name: successText, label: 'Success: Text', widget: string }
+          - name: errorText
+            label: 'Error: Text'
+            widget: string
+            hint: '{phone} is replaced with the business phone number.'
+          - { name: notProvided, label: 'Review: Empty Field', widget: string }
+          - { name: noneSelected, label: 'Review: No Services Picked', widget: string }
+          - name: routeJoiner
+            label: 'Review: Route Joiner'
+            widget: string
+            hint: 'Joins the two locations, e.g. " to ". Keep the spaces.'
+          - name: moveTypes
+            label: Move Type Options
+            widget: list
+            field: { name: option, label: Option, widget: string }
+          - name: homeSizes
+            label: Home Size Options
+            widget: list
+            field: { name: option, label: Option, widget: string }
+          - name: additionalServices
+            label: Additional Service Options
+            widget: list
+            field: { name: option, label: Option, widget: string }
+          - name: fields
+            label: Field Labels
+            widget: object
+            collapsed: true
+            fields:
+              - name: moveType
+                label: Move Type
+                widget: object
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: placeholder, label: Placeholder, widget: string, required: false, default: '' }
+              - name: moveFrom
+                label: Move From
+                widget: object
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: placeholder, label: Placeholder, widget: string, required: false, default: '' }
+              - name: moveTo
+                label: Move To
+                widget: object
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: placeholder, label: Placeholder, widget: string, required: false, default: '' }
+              - name: moveDate
+                label: Move Date
+                widget: object
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: placeholder, label: Placeholder, widget: string, required: false, default: '' }
+              - name: homeSize
+                label: Home Size
+                widget: object
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: placeholder, label: Placeholder, widget: string, required: false, default: '' }
+              - name: services
+                label: Additional Services
+                widget: object
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: placeholder, label: Placeholder, widget: string, required: false, default: '' }
+              - name: firstName
+                label: First Name
+                widget: object
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: placeholder, label: Placeholder, widget: string, required: false, default: '' }
+              - name: lastName
+                label: Last Name
+                widget: object
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: placeholder, label: Placeholder, widget: string, required: false, default: '' }
+              - name: email
+                label: Email
+                widget: object
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: placeholder, label: Placeholder, widget: string, required: false, default: '' }
+              - name: phone
+                label: Phone
+                widget: object
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: placeholder, label: Placeholder, widget: string, required: false, default: '' }
+              - name: notes
+                label: Notes
+                widget: object
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: placeholder, label: Placeholder, widget: string, required: false, default: '' }
+          - name: reviewLabels
+            label: Review Step Labels
+            widget: object
+            collapsed: true
+            fields:
+              - { name: moveType, label: Move Type, widget: string }
+              - { name: route, label: Route, widget: string }
+              - { name: moveDate, label: Move Date, widget: string }
+              - { name: homeSize, label: Home Size, widget: string }
+              - { name: services, label: Services, widget: string }
+              - { name: name, label: Name, widget: string }
+              - { name: contact, label: Contact, widget: string }
+              - { name: notes, label: Notes, widget: string }
+
+  # ============================================================ Page copy ===
+  - name: pages
+    label: Page Copy
+    files:
+      - name: home
+        label: Home Page
+        file: src/data/pages/home.json
+        fields:
+          - name: seo
+            label: Search Listing
+            widget: object
+            fields:
+              - { name: title, label: Title, widget: string }
+              - name: titleOverride
+                label: Full Browser Title
+                widget: string
+                required: false
+                hint: Replaces the "Title | Summit Moving Limited" form on this page only.
+              - { name: description, label: Meta Description, widget: text }
+          - name: hero
+            label: Hero
+            widget: object
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string }
+              - { name: headingLead, label: 'Headline: First Line', widget: string }
+              - name: headingAccent
+                label: 'Headline: Second Line'
+                widget: string
+                hint: Shown in blue.
+              - { name: sub, label: Subheading, widget: text }
+              - { name: ctaLabel, label: Button Label, widget: string }
+          - name: trust
+            label: Trust Bar
+            label_singular: Cell
+            widget: list
+            summary: '{{fields.text}}'
+            fields:
+              - name: icon
+                label: Icon
+                widget: select
+                options:
+                  - shield
+                  - shield-check
+                  - users
+                  - users-solo
+                  - star
+                  - clock
+                  - home
+                  - home-roof
+                  - chart
+                  - box
+                  - check-square
+                  - calendar
+                  - map-pin
+                  - diamond
+                  - phone
+                  - mail
+              - name: heading
+                label: Heading
+                widget: string
+                required: false
+                default: ''
+                hint: Leave empty for a figure you cannot verify - the site shows a dash rather than a made-up number.
+              - { name: text, label: Text, widget: string }
+          - name: servicesHead
+            label: 'Services Section: Heading'
+            widget: object
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text, required: false }
+          - { name: servicesLinkLabel, label: 'Services Section: Card Link', widget: string }
+          - name: howHead
+            label: 'How It Works: Heading'
+            widget: object
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text, required: false }
+          - { name: howCtaLabel, label: 'How It Works: Button', widget: string }
+          - name: testimonialsHead
+            label: 'Reviews: Heading'
+            widget: object
+            hint: Only appears once there is at least one customer review.
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text, required: false }
+          - name: why
+            label: Why Choose Us
+            widget: object
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string }
+              - name: headingLines
+                label: Heading Lines
+                widget: list
+                field: { name: line, label: Line, widget: string }
+                hint: One entry per line of the heading.
+              - { name: lead, label: Lead, widget: text }
+              - name: points
+                label: Points
+                widget: list
+                summary: '{{fields.heading}}'
+                fields:
+                  - name: icon
+                    label: Icon
+                    widget: select
+                    options:
+                      - shield
+                      - shield-check
+                      - users
+                      - users-solo
+                      - star
+                      - clock
+                      - home
+                      - home-roof
+                      - chart
+                      - box
+                      - check-square
+                      - calendar
+                  - { name: heading, label: Heading, widget: string }
+                  - { name: text, label: Text, widget: text }
+              - name: stats
+                label: Figures
+                widget: list
+                summary: '{{fields.label}}'
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - name: value
+                    label: Value
+                    widget: string
+                    required: false
+                    hint: Leave empty until you have a real, verifiable number. Empty shows as a dash.
+          - name: cta
+            label: Closing Call to Action
+            widget: object
+            fields:
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text }
+              - { name: label, label: Button Label, widget: string }
+
+      - name: services
+        label: Services Page
+        file: src/data/pages/services.json
+        fields:
+          - name: seo
+            label: Search Listing
+            widget: object
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: description, label: Meta Description, widget: text }
+          - name: hero
+            label: Page Heading
+            widget: object
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: lead, label: Lead, widget: text, required: false }
+          - name: jumpLinks
+            label: Jump Links
+            widget: list
+            summary: '{{fields.label}}'
+            fields:
+              - { name: label, label: Label, widget: string }
+              - { name: href, label: Link, widget: string }
+          - name: panel
+            label: Side Panel
+            widget: object
+            fields:
+              - name: strong
+                label: Headline Figure
+                widget: string
+                required: false
+                hint: Leave empty and the page counts the services itself.
+              - { name: text, label: Text, widget: text }
+              - name: stats
+                label: Figures
+                widget: list
+                summary: '{{fields.label}}'
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - name: value
+                    label: Value
+                    widget: string
+                    required: false
+                    hint: Leave empty until you have a real, verifiable number. Empty shows as a dash.
+          - name: coreHead
+            label: 'Core Services: Heading'
+            widget: object
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text, required: false }
+          - name: supportHead
+            label: 'Support Services: Heading'
+            widget: object
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text, required: false }
+          - name: cta
+            label: Closing Call to Action
+            widget: object
+            fields:
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text }
+              - { name: label, label: Button Label, widget: string }
+
+      - name: faq
+        label: FAQ Page
+        file: src/data/pages/faq.json
+        fields:
+          - name: seo
+            label: Search Listing
+            widget: object
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: description, label: Meta Description, widget: text }
+          - name: hero
+            label: Page Heading
+            widget: object
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: lead, label: Lead, widget: text, required: false }
+          - name: panel
+            label: Side Panel
+            widget: object
+            fields:
+              - { name: strong, label: Headline, widget: string, required: false }
+              - { name: text, label: Text, widget: text }
+              - name: stats
+                label: Figures
+                widget: list
+                required: false
+                summary: '{{fields.label}}'
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: value, label: Value, widget: string, required: false }
+          - name: cta
+            label: Closing Call to Action
+            widget: object
+            fields:
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text }
+              - { name: label, label: Button Label, widget: string }
+
+      - name: guide
+        label: Moving Guide Page
+        file: src/data/pages/guide.json
+        fields:
+          - name: seo
+            label: Search Listing
+            widget: object
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: description, label: Meta Description, widget: text }
+          - name: hero
+            label: Page Heading
+            widget: object
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: lead, label: Lead, widget: text, required: false }
+          - name: panel
+            label: Side Panel
+            widget: object
+            fields:
+              - name: strong
+                label: Headline Figure
+                widget: string
+                required: false
+                hint: Leave empty and the page counts the steps itself.
+              - { name: text, label: Text, widget: text }
+              - name: stats
+                label: Figures
+                widget: list
+                required: false
+                summary: '{{fields.label}}'
+                fields:
+                  - { name: label, label: Label, widget: string }
+                  - { name: value, label: Value, widget: string, required: false }
+          - name: processHead
+            label: 'Process: Heading'
+            widget: object
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text, required: false }
+          - name: checklistHead
+            label: 'Checklist: Heading'
+            widget: object
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string }
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text, required: false }
+          - name: checklist
+            label: Checklist Cards
+            widget: list
+            summary: '{{fields.heading}}'
+            fields:
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text, required: false }
+              - name: items
+                label: Items
+                widget: list
+                field: { name: item, label: Item, widget: string }
+          - name: tips
+            label: Tip Cards
+            widget: list
+            summary: '{{fields.heading}}'
+            fields:
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text, required: false }
+              - name: items
+                label: Items
+                widget: list
+                field: { name: item, label: Item, widget: string }
+          - name: cta
+            label: Closing Call to Action
+            widget: object
+            fields:
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text }
+              - { name: label, label: Button Label, widget: string }
+
+      - name: blog
+        label: Blog Page
+        file: src/data/pages/blog.json
+        fields:
+          - name: seo
+            label: Search Listing
+            widget: object
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: description, label: Meta Description, widget: text }
+          - name: heading
+            label: Page Heading
+            widget: object
+            fields:
+              - { name: eyebrow, label: Eyebrow, widget: string }
+              - { name: title, label: Title, widget: string }
+              - { name: text, label: Text, widget: text }
+          - name: empty
+            label: Empty State
+            widget: object
+            hint: What the blog shows while no post is published.
+            fields:
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text }
+              - { name: label, label: Button Label, widget: string }
+              - { name: href, label: Button Link, widget: string }
+          - name: sidebar
+            label: Sidebar Labels
+            widget: object
+            collapsed: true
+            hint: The lists themselves live under Site Settings.
+            fields:
+              - { name: searchHeading, label: 'Search: Heading', widget: string }
+              - { name: searchPlaceholder, label: 'Search: Placeholder', widget: string }
+              - { name: areasHeading, label: 'Service Areas: Heading', widget: string }
+              - { name: areasLinkLabel, label: 'Service Areas: Link Label', widget: string }
+              - { name: areasLinkHref, label: 'Service Areas: Link', widget: string }
+              - { name: ratingHeading, label: 'Reviews: Heading', widget: string }
+              - { name: ratingLabel, label: 'Reviews: Label', widget: string }
+              - { name: popularHeading, label: 'Popular Services: Heading', widget: string }
+              - { name: categoriesHeading, label: 'Categories: Heading', widget: string }
+          - name: postCta
+            label: Call to Action Under a Post
+            widget: object
+            fields:
+              - { name: heading, label: Heading, widget: string }
+              - { name: text, label: Text, widget: text }
+              - { name: label, label: Button Label, widget: string }
+
+  # ============================================================= Services ===
+  - name: services
+    label: Services
+    label_singular: Service
+    folder: src/content/services
+    extension: json
+    format: json
+    # Locked on purpose. The filename is the anchor id on /services/, and the
+    # home page links to #local-moving, #long-distance and #packing. Renaming
+    # or deleting an entry breaks those links from outside the site too.
+    create: false
+    delete: false
+    identifier_field: title
+    sortable_fields: [group, order, title]
+    summary: '{{title}}'
+    fields:
+      - name: title
+        label: Full Title
+        widget: string
+        hint: Shown on the services page.
+      - name: shortTitle
+        label: Short Title
+        widget: string
+        required: false
+        hint: Used on the home page card and in the footer. Falls back to the full title.
+      - name: group
+        label: Group
+        widget: select
+        options: [core, support]
+      - { name: order, label: Order Within Group, widget: number, value_type: int }
+      - name: tag
+        label: Tag
+        widget: string
+        hint: The small pill at the top of the tile.
+      - { name: summary, label: Summary, widget: text }
+      - { name: featuredOnHome, label: Show on Home Page, widget: boolean, default: false }
+      - { name: homeOrder, label: 'Home Page: Order', widget: number, value_type: int, required: false }
+      - { name: homeSummary, label: 'Home Page: Summary', widget: text, required: false }
+      - name: homeFeatures
+        label: 'Home Page: Bullet Points'
+        widget: list
+        required: false
+        field: { name: feature, label: Feature, widget: string }
+      - name: icon
+        label: 'Home Page: Icon'
+        widget: select
+        required: false
+        options: [home, chart, box, shield, shield-check, users, clock, star, calendar, check-square]
+      - { name: showInFooter, label: Show in Footer, widget: boolean, default: false }
+      - { name: footerOrder, label: 'Footer: Order', widget: number, value_type: int, required: false }
+
+  # ================================================================== FAQ ===
+  - name: faq
+    label: FAQ Questions
+    label_singular: Question
+    folder: src/content/faq
+    extension: json
+    format: json
+    create: true
+    identifier_field: question
+    sortable_fields: [order, question]
+    summary: '{{question}}'
+    fields:
+      - { name: question, label: Question, widget: string }
+      - { name: answer, label: Answer, widget: text }
+      - { name: order, label: Order, widget: number, value_type: int }
+      - name: openByDefault
+        label: Open by Default
+        widget: boolean
+        default: false
+        hint: Normally only the first question should have this on.
+
+  # ======================================================== Process steps ===
+  - name: steps
+    label: Process Steps
+    label_singular: Step
+    folder: src/content/steps
+    extension: json
+    format: json
+    create: false
+    delete: false
+    identifier_field: title
+    sortable_fields: [order, title]
+    summary: '{{order}}. {{title}}'
+    fields:
+      - { name: order, label: Order, widget: number, value_type: int }
+      - { name: title, label: 'Home Page: Title', widget: string }
+      - { name: description, label: 'Home Page: Description', widget: text }
+      - name: guideTitle
+        label: 'Moving Guide: Title'
+        widget: string
+        required: false
+        hint: Falls back to the home page title.
+      - name: guideDescription
+        label: 'Moving Guide: Description'
+        widget: text
+        required: false
+        hint: Falls back to the home page description.
+      - name: image
+        label: Photo
+        widget: image
+        required: false
+        # These four photos are resized and converted at build time, which only
+        # works for files under src/assets. Do not point this at the uploads
+        # folder: the build will fail with an unresolved image path.
+        media_folder: /src/assets/steps
+        public_folder: ../../assets/steps
+      - { name: imageAlt, label: Photo Description, widget: string, required: false, default: '' }
+      - name: icon
+        label: Icon
+        widget: select
+        required: false
+        options: [check-square, calendar, home-roof, shield-check, shield, clock, box, chart, users]
+
+  # ================================================================ Blog ====
+  - name: blog
+    label: Blog Posts
+    label_singular: Post
+    folder: src/content/blog
+    extension: md
+    format: frontmatter
+    create: true
+    identifier_field: title
+    sortable_fields: [pubDate, title, category]
+    summary: '{{title}}'
+    fields:
+      - { name: title, label: Title, widget: string }
+      - name: description
+        label: Summary
+        widget: text
+        hint: Shown on the blog listing, and used as the search description unless the next field is filled in.
+      - { name: seoDescription, label: Meta Description, widget: text, required: false }
+      - name: pubDate
+        label: Publish Date
+        widget: datetime
+        date_format: 'YYYY-MM-DD'
+        time_format: false
+        picker_utc: true
+      - name: category
+        label: Category
+        widget: select
+        options:
+          - Local Moving
+          - Interstate Moving
+          - Packing Tips
+          - Moving Guides
+          - Company News
+        hint: Must match a category under Site Settings for the sidebar to count it.
+      - name: readingTime
+        label: Reading Time
+        widget: string
+        required: false
+        hint: 'e.g. "7 min". Leave empty to omit it.'
+      - { name: image, label: Cover Image, widget: image, required: false }
+      - { name: imageAlt, label: Image Description, widget: string, required: false, default: '' }
+      - name: featured
+        label: Featured
+        widget: boolean
+        default: false
+        hint: The featured post gets the large card at the top of the blog. Turn this on for one post only.
+      - name: draft
+        label: Draft
+        widget: boolean
+        default: true
+        hint: A draft is not published at all - no page, no link, nothing in the sitemap. Turn this off when the post is ready to go live.
+      - { name: body, label: Post, widget: markdown }
+
+  # ======================================================== Testimonials ====
+  - name: testimonials
+    label: Customer Reviews
+    label_singular: Review
+    folder: src/content/testimonials
+    extension: json
+    format: json
+    create: true
+    identifier_field: name
+    sortable_fields: [order, name]
+    summary: '{{name}}'
+    # The review section on the home page stays hidden while this is empty.
+    # Add a real review and it appears. Only add reviews that were given.
+    fields:
+      - { name: quote, label: Review, widget: text }
+      - { name: name, label: Customer Name, widget: string }
+      - name: detail
+        label: Detail
+        widget: string
+        hint: 'Shown under the name, e.g. "Local move, Naperville IL"'
+      - name: initials
+        label: Initials
+        widget: string
+        required: false
+        hint: Shown in the circle. Defaults to the first letter of the name.
+      - { name: rating, label: Stars, widget: number, value_type: int, min: 1, max: 5, default: 5 }
+      - { name: order, label: Order, widget: number, value_type: int, default: 0 }
+
+  # =============================================================== Legal ====
+  - name: legal
+    label: Legal Pages
+    label_singular: Page
+    folder: src/content/legal
+    extension: md
+    format: frontmatter
+    create: false
+    delete: false
+    identifier_field: title
+    summary: '{{title}}'
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: eyebrow, label: Eyebrow, widget: string }
+      - name: lastUpdated
+        label: Last Updated
+        widget: datetime
+        date_format: 'YYYY-MM-DD'
+        time_format: false
+        picker_utc: true
+      - { name: seoDescription, label: Meta Description, widget: text }
+      - { name: body, label: Content, widget: markdown }
