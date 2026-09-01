@@ -1,0 +1,212 @@
+---
+import { getCollection } from 'astro:content';
+import { homePage } from '../lib/pages';
+
+/**
+ * The customer review marquee.
+ *
+ * Renders nothing while the collection is empty, which is where it starts:
+ * the cards that used to be here were fabricated and were deleted. What they
+ * left behind was a comment describing how to restore them, plus CSS and a
+ * cloning script that nothing used. This component is that comment turned
+ * into code -- add one entry and the section comes back.
+ *
+ * The marquee scrolls by animating a track that holds the cards twice over.
+ * The duplicates are made in the browser rather than in the template so they
+ * stay out of the accessibility tree and out of the HTML payload.
+ */
+const items = (await getCollection('testimonials')).sort((a, b) => a.data.order - b.data.order);
+const head = homePage.testimonialsHead;
+---
+
+{
+  items.length > 0 && (
+    <section class="section testimonials-section" id="reviews">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">{head.eyebrow}</div>
+          <h2>{head.heading}</h2>
+          {head.text && <p>{head.text}</p>}
+        </div>
+      </div>
+
+      <div class="testi-marquee">
+        <div class="testi-track" data-testimonial-track>
+          {items.map((item) => (
+            <article class="testi-card">
+              <div class="stars" aria-label={`${item.data.rating} out of 5`}>
+                {'★'.repeat(item.data.rating)}
+              </div>
+              <p class="quote">{item.data.quote}</p>
+              <div class="testi-person">
+                <div class="testi-avatar" aria-hidden="true">
+                  {item.data.initials ?? item.data.name.charAt(0)}
+                </div>
+                <div>
+                  <h6>{item.data.name}</h6>
+                  <span>{item.data.detail}</span>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+<script>
+  const track = document.querySelector<HTMLElement>('[data-testimonial-track]');
+  if (track) {
+    // The animation translates by -50%, so the track has to hold the cards
+    // twice for the loop to be seamless.
+    [...track.children].forEach((card) => {
+      const clone = card.cloneNode(true) as HTMLElement;
+      clone.setAttribute('aria-hidden', 'true');
+      track.appendChild(clone);
+    });
+  }
+</script>
+
+<style>
+  .testimonials-section {
+    padding-top: 18px;
+    background:
+      linear-gradient(180deg, rgba(248, 251, 255, 0.96), rgba(255, 255, 255, 0.985)),
+      var(--image-services);
+    background-size: cover;
+    background-position: center;
+  }
+  .testimonials-section .section-head {
+    margin-bottom: 24px;
+  }
+  .testi-marquee {
+    overflow: hidden;
+    margin: 0 calc(50% - 50vw);
+    padding: 0 0 4px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .testi-track {
+    display: flex;
+    gap: 22px;
+    width: max-content;
+    animation: testi-scroll-right 58s linear infinite;
+    will-change: transform;
+  }
+  .testi-track:hover {
+    animation-play-state: paused;
+  }
+  @keyframes testi-scroll-right {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  .testi-card {
+    flex: 0 0 380px;
+    display: flex;
+    flex-direction: column;
+    min-height: 270px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.94)), #fff;
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 26px;
+    box-shadow: 0 12px 30px rgba(12, 27, 58, 0.08);
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+  .testi-card:hover {
+    transform: translateY(-2px);
+    border-color: #c9d7ea;
+    box-shadow: 0 16px 38px rgba(12, 27, 58, 0.12);
+  }
+  .stars {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    margin-bottom: 16px;
+    color: #fbbc04;
+    font-size: 16px;
+    letter-spacing: 1px;
+  }
+  .stars::before {
+    content: 'G';
+    width: 26px;
+    height: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 9px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffffff 0%, #edf4ff 100%);
+    border: 1px solid #d7e5ff;
+    box-shadow: 0 4px 10px rgba(30, 95, 217, 0.1);
+    color: #1e5fd9;
+    font-size: 17px;
+    font-weight: 900;
+    font-family: Arial, sans-serif;
+    letter-spacing: 0;
+  }
+  .testi-card p.quote {
+    font-size: 15px;
+    color: var(--navy);
+    line-height: 1.62;
+    margin-bottom: 20px;
+    flex: 1;
+  }
+  .testi-person {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--grey-200);
+  }
+  .testi-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #edf4ff, #f8fbff);
+    color: var(--blue);
+    border: 1px solid #d7e5ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .testi-person h6 {
+    font-size: 14.5px;
+    font-weight: 700;
+  }
+  .testi-person span {
+    font-size: 13px;
+    color: var(--grey-500);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .testi-track {
+      animation: none;
+      transform: none;
+    }
+  }
+  @media (max-width: 1080px) {
+    .testi-card {
+      flex-basis: 360px;
+    }
+  }
+  @media (max-width: 640px) {
+    .testimonials-section {
+      padding-top: 12px;
+    }
+    .testimonials-section .section-head {
+      margin-bottom: 20px;
+    }
+    .testi-card {
+      flex-basis: 300px;
+      padding: 22px;
+    }
+  }
+</style>

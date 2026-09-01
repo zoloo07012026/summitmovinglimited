@@ -1,0 +1,34 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import ServiceCards from '../components/ServiceCards.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import WhyUs from '../components/WhyUs.astro';
+import Testimonials from '../components/Testimonials.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { homePage } from '../lib/pages';
+
+/**
+ * home.css carries the handful of rules more than one section needs
+ * (.eyebrow, .section, .section-head). It is imported here and nowhere else,
+ * mirroring the fact that index.html never loaded page.css -- see the header
+ * comment in that file for the values that differ between the two sides.
+ */
+import '../styles/home.css';
+---
+
+<BaseLayout
+  title={homePage.seo.title}
+  titleOverride={homePage.seo.titleOverride}
+  description={homePage.seo.description}
+  active="home"
+>
+  <main id="top">
+    <Hero />
+    <ServiceCards />
+    <HowItWorks />
+    <WhyUs />
+    <Testimonials />
+    <CtaBand cta={homePage.cta} variant="photo" id="contact" />
+  </main>
+</BaseLayout>

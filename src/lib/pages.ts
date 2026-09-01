@@ -4,12 +4,16 @@ import rawServices from '../data/pages/services.json';
 import rawFaq from '../data/pages/faq.json';
 import rawGuide from '../data/pages/guide.json';
 import rawBlog from '../data/pages/blog.json';
+import rawHome from '../data/pages/home.json';
+import rawForms from '../data/forms.json';
 
 import {
   ServicesPageSchema,
   FaqPageSchema,
   GuidePageSchema,
   BlogPageSchema,
+  HomePageSchema,
+  FormsSchema,
 } from './schema';
 
 /**
@@ -32,3 +36,5 @@ export const servicesPage = parse(ServicesPageSchema, rawServices, 'src/data/pag
 export const faqPage = parse(FaqPageSchema, rawFaq, 'src/data/pages/faq.json');
 export const guidePage = parse(GuidePageSchema, rawGuide, 'src/data/pages/guide.json');
 export const blogPage = parse(BlogPageSchema, rawBlog, 'src/data/pages/blog.json');
+export const homePage = parse(HomePageSchema, rawHome, 'src/data/pages/home.json');
+export const forms = parse(FormsSchema, rawForms, 'src/data/forms.json');

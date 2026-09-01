@@ -110,6 +110,30 @@ const blog = defineCollection({
   }),
 });
 
+/**
+ * Customer reviews. Intentionally empty.
+ *
+ * The home page used to carry a marquee of fabricated testimonials. They were
+ * deleted, and what replaced them was a comment explaining how to put them
+ * back plus a hundred lines of CSS and JS that nothing used. This collection
+ * is that instruction made executable: add one entry through the CMS and the
+ * section returns, styled, with the marquee working.
+ */
+const testimonials = defineCollection({
+  loader: glob({ base: './src/content/testimonials', pattern: '*.json' }),
+  schema: z.object({
+    quote: z.string(),
+    name: z.string(),
+    /** Under the name, e.g. "Local move, Naperville IL". */
+    detail: z.string(),
+    /** Shown in the avatar circle. Falls back to the name's first letter. */
+    initials: z.string().optional(),
+    /** 1-5. Only ever set it to what the customer actually gave. */
+    rating: z.number().int().min(1).max(5).default(5),
+    order: z.number().int().default(0),
+  }),
+});
+
 const legal = defineCollection({
   loader: glob({ base: './src/content/legal', pattern: '*.md' }),
   schema: z.object({
@@ -120,4 +144,4 @@ const legal = defineCollection({
   }),
 });
 
-export const collections = { services, faq, steps, blog, legal };
+export const collections = { services, faq, steps, blog, testimonials, legal };

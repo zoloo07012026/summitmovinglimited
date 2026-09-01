@@ -141,6 +141,89 @@ export const FaqPageSchema = z.object({
   cta: CtaSchema,
 });
 
+/**
+ * A trust-bar cell. Two of the four are figures rather than claims, so a blank
+ * heading is a valid state and renders as an em-dash.
+ */
+export const TrustItemSchema = z.object({
+  icon: z.string(),
+  heading: z.string().default(''),
+  text: z.string(),
+});
+
+export const WhyPointSchema = z.object({
+  icon: z.string(),
+  heading: z.string(),
+  text: z.string(),
+});
+
+export const HomePageSchema = z.object({
+  /** The home page keeps its original full <title> rather than the suffix form. */
+  seo: SeoSchema.extend({ titleOverride: z.string().optional() }),
+  hero: z.object({
+    eyebrow: z.string(),
+    /** The headline is two lines; the second is the blue half. */
+    headingLead: z.string(),
+    headingAccent: z.string(),
+    sub: z.string(),
+    ctaLabel: z.string(),
+  }),
+  trust: z.array(TrustItemSchema).default([]),
+  servicesHead: SectionHeadSchema,
+  /** The link at the foot of every service card. */
+  servicesLinkLabel: z.string(),
+  howHead: SectionHeadSchema,
+  /** Only rendered once the testimonials collection has an entry. */
+  testimonialsHead: SectionHeadSchema,
+  howCtaLabel: z.string(),
+  why: z.object({
+    eyebrow: z.string(),
+    /** Rendered one per line, so the break is content rather than markup. */
+    headingLines: z.array(z.string()).default([]),
+    lead: z.string(),
+    points: z.array(WhyPointSchema).default([]),
+    stats: z.array(StatSchema).default([]),
+  }),
+  cta: CtaSchema,
+});
+
+/**
+ * The quote form. The endpoint and the phone number in the error message used
+ * to be hardcoded in index.html's script, which meant changing either one was
+ * a code edit.
+ */
+const FormFieldSchema = z.object({
+  label: z.string(),
+  placeholder: z.string().default(''),
+});
+
+export const FormsSchema = z.object({
+  endpoint: z.string().url(),
+  subject: z.string(),
+  heading: z.string(),
+  sub: z.string(),
+  /** Three labels, one per step. The step count follows this array. */
+  stepLabels: z.array(z.string()).default([]),
+  nextLabel: z.string(),
+  submitLabel: z.string(),
+  sendingLabel: z.string(),
+  secureNote: z.string(),
+  successHeading: z.string(),
+  successText: z.string(),
+  /** `{phone}` is replaced with site.json's number at build time. */
+  errorText: z.string(),
+  /** Shown in the review for a field the customer left empty. */
+  notProvided: z.string(),
+  noneSelected: z.string(),
+  /** Joins the two locations on the review's Route row. */
+  routeJoiner: z.string(),
+  moveTypes: z.array(z.string()).default([]),
+  homeSizes: z.array(z.string()).default([]),
+  additionalServices: z.array(z.string()).default([]),
+  fields: z.record(FormFieldSchema),
+  reviewLabels: z.record(z.string()),
+});
+
 /** The sidebar's fixed labels. The lists themselves come from site.json. */
 export const BlogSidebarSchema = z.object({
   searchHeading: z.string(),

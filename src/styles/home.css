@@ -1,0 +1,56 @@
+/*
+ * Rules shared by more than one home page component. Imported by index.astro
+ * and nowhere else.
+ *
+ * This file exists for the same reason interior.css does, and the pairing is
+ * the point: index.html and page.css never loaded together, and several of
+ * these selectors carry different values on the two sides --
+ *
+ *   .section          64px here, 68px on the interior pages
+ *   .eyebrow          14px / .08em / 700 here, 13px / .1em / uppercase there
+ *   .section-head     max-width 640 / margin-bottom 34 here, 720 / 36 there
+ *   .section-head h2  clamp(...,38px) here, clamp(...,40px) there
+ *
+ * Keeping the two sets in files that never co-occur preserves that difference
+ * without either one having to out-specify the other. The interior copies are
+ * additionally scoped under .is-interior as a second line of defence; see the
+ * header comment in interior.css.
+ */
+
+.eyebrow {
+  color: var(--blue);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  margin-bottom: 14px;
+}
+
+.section {
+  padding: 64px 0;
+}
+
+.section-head {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 34px;
+}
+.section-head .eyebrow {
+  margin-bottom: 12px;
+}
+.section-head h2 {
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.section-head p {
+  margin-top: 12px;
+  color: var(--grey-700);
+  font-size: 16px;
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 56px 0;
+  }
+}
