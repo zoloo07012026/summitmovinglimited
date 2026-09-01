@@ -1,0 +1,8 @@
+# Production still serves the hand-written HTML from the repo root.
+# The Astro build settings live on the astro-migration branch and replace
+# this block when that branch is merged.
+[build]
+  publish = "."
+
+[build.environment]
+  NODE_VERSION = "24"
