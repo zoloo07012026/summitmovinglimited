@@ -1,0 +1,51 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import type { SectionHead } from '../lib/schema';
+
+/**
+ * One band of service tiles on /services/.
+ *
+ * The tile id comes from the entry id, which is the JSON filename -- that is
+ * what keeps /services/#local-moving, #long-distance and #packing alive, and
+ * why the CMS is configured not to rename files in this collection.
+ *
+ * `gridClass` must stay on the element that directly contains the tiles:
+ * .support-grid and .core-service-grid centre the final row with
+ * :nth-last-child(2) / :last-child, which count DIRECT children. Wrapping the
+ * tiles in anything breaks that silently.
+ */
+interface Props {
+  id: string;
+  head: SectionHead;
+  services: CollectionEntry<'services'>[];
+  gridClass: 'core-service-grid' | 'support-grid';
+  /** Renders the band on the alternate background. */
+  alt?: boolean;
+}
+
+const { id, head, services, gridClass, alt = false } = Astro.props;
+---
+
+<section class:list={['section', 'service-band', { alt }]} id={id}>
+  <div class="wrap">
+    <div class="service-section-head">
+      <div>
+        <div class="eyebrow">{head.eyebrow}</div>
+        <h2>{head.heading}</h2>
+      </div>
+      {head.text && <p>{head.text}</p>}
+    </div>
+
+    <div class:list={['service-card-grid', gridClass]}>
+      {
+        services.map((service) => (
+          <article class="service-tile" id={service.id}>
+            <span class="tag">{service.data.tag}</span>
+            <h3>{service.data.title}</h3>
+            <p>{service.data.summary}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

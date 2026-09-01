@@ -117,6 +117,13 @@ export const CardListSchema = z.object({
   items: z.array(z.string()).default([]),
 });
 
+export type PageHero = z.infer<typeof PageHeroSchema>;
+export type HeroPanel = z.infer<typeof HeroPanelSchema>;
+export type SectionHead = z.infer<typeof SectionHeadSchema>;
+export type Cta = z.infer<typeof CtaSchema>;
+export type Link = z.infer<typeof LinkSchema>;
+export type CardList = z.infer<typeof CardListSchema>;
+
 export const ServicesPageSchema = z.object({
   seo: SeoSchema,
   hero: PageHeroSchema,

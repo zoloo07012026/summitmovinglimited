@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '../layouts/PageLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import CheckCard from '../components/CheckCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { guidePage } from '../lib/pages';
+
+const steps = (await getCollection('steps')).sort((a, b) => a.data.order - b.data.order);
+---
+
+<PageLayout
+  title={guidePage.seo.title}
+  description={guidePage.seo.description}
+  active="guide"
+>
+  <PageHero hero={guidePage.hero} panel={guidePage.panel} strong={`${steps.length} steps`} />
+
+  <section class="section">
+    <div class="wrap split">
+      <div>
+        <div class="eyebrow">{guidePage.processHead.eyebrow}</div>
+        <h2>{guidePage.processHead.heading}</h2>
+        {guidePage.processHead.text && <p class="lead">{guidePage.processHead.text}</p>}
+      </div>
+      <div class="card step-list">
+        {
+          steps.map((step) => (
+            <div class="step-row">
+              <div>
+                <h3>{step.data.guideTitle ?? step.data.title}</h3>
+                <p>{step.data.guideDescription ?? step.data.description}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">{guidePage.checklistHead.eyebrow}</div>
+        <h2>{guidePage.checklistHead.heading}</h2>
+      </div>
+      <div class="grid-3">
+        {guidePage.checklist.map((card) => <CheckCard card={card} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap grid-2">
+      {guidePage.tips.map((card) => <CheckCard card={card} />)}
+    </div>
+  </section>
+
+  <CtaBand cta={guidePage.cta} />
+</PageLayout>

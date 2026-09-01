@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '../layouts/PageLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import ServiceTiles from '../components/ServiceTiles.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { servicesPage } from '../lib/pages';
+
+const all = await getCollection('services');
+const byOrder = (a: (typeof all)[number], b: (typeof all)[number]) =>
+  a.data.order - b.data.order;
+
+const core = all.filter((s) => s.data.group === 'core').sort(byOrder);
+const support = all.filter((s) => s.data.group === 'support').sort(byOrder);
+
+// The panel used to read a hardcoded "10 services". Counting the collection
+// means adding a service can never leave the headline lying.
+const headline = `${all.length} services`;
+---
+
+<PageLayout
+  title={servicesPage.seo.title}
+  description={servicesPage.seo.description}
+  active="services"
+  mainClass="services-page"
+>
+  <PageHero
+    hero={servicesPage.hero}
+    panel={servicesPage.panel}
+    strong={headline}
+    jumpLinks={servicesPage.jumpLinks}
+    sectionClass="services-hero"
+    panelClass="service-hero-card"
+  />
+
+  <ServiceTiles
+    id="core-services"
+    head={servicesPage.coreHead}
+    services={core}
+    gridClass="core-service-grid"
+  />
+
+  <ServiceTiles
+    id="support-services"
+    head={servicesPage.supportHead}
+    services={support}
+    gridClass="support-grid"
+    alt
+  />
+
+  <CtaBand
+    cta={servicesPage.cta}
+    sectionClass="service-cta-section"
+    bandClass="service-cta"
+  />
+</PageLayout>

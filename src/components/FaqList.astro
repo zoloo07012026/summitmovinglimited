@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+/**
+ * The accordion on /faq/. Native <details>, no JavaScript -- the arrow is a
+ * CSS ::after on the summary and rotates via details[open], exactly as before.
+ */
+interface Props {
+  items: CollectionEntry<'faq'>[];
+}
+
+const { items } = Astro.props;
+---
+
+<section class="section">
+  <div class="wrap faq-list">
+    {
+      items.map((item) => (
+        <details open={item.data.openByDefault}>
+          <summary>{item.data.question}</summary>
+          <p>{item.data.answer}</p>
+        </details>
+      ))
+    }
+  </div>
+</section>

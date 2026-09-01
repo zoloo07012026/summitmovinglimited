@@ -198,7 +198,10 @@
 .service-band {
   position: relative;
 }
-.service-band.alt {
+/* Scoped only to outrank `.is-interior .section.alt` above, which would
+   otherwise flatten this gradient to plain white. In page.css the two rules
+   had equal specificity and this one simply came later. */
+.is-interior .service-band.alt {
   background: linear-gradient(180deg, #fff 0%, #f8fbff 100%);
 }
 .service-section-head {
@@ -332,7 +335,9 @@
 .core-service-grid .service-tile:last-child:hover {
   transform: translateX(-50%) translateY(-3px);
 }
-.service-cta-section {
+/* Same reason as .service-band.alt: without the scope this loses to
+   `.is-interior .section` and the band drops 24px down the page. */
+.is-interior .service-cta-section {
   padding-top: 44px;
 }
 .service-cta {

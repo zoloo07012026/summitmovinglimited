@@ -1,0 +1,32 @@
+---
+import type { CardList } from '../lib/schema';
+
+/**
+ * A .card with a heading, optional intro and a ticked feature list. Used five
+ * times on the moving guide (three checklist stages, two tip cards).
+ *
+ * The tick is a literal character in a <span class="check">, not an icon --
+ * .check styles it as a small round badge and swapping in an <svg> would
+ * change its box.
+ */
+interface Props {
+  card: CardList;
+}
+
+const { card } = Astro.props;
+---
+
+<div class="card">
+  <h3>{card.heading}</h3>
+  {card.text && <p>{card.text}</p>}
+  <ul class="feature-list">
+    {
+      card.items.map((item) => (
+        <li>
+          <span class="check">✓</span>
+          {item}
+        </li>
+      ))
+    }
+  </ul>
+</div>
