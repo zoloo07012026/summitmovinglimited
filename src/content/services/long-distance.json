@@ -1,0 +1,15 @@
+{
+  "title": "Long-Distance Moving",
+  "shortTitle": "Long-Distance Moving",
+  "group": "core",
+  "order": 3,
+  "tag": "Route",
+  "summary": "Clear planning for longer moves with pickup timing, loading details, and delivery communication.",
+  "featuredOnHome": true,
+  "homeOrder": 2,
+  "homeSummary": "Safe, on-time moves across state lines with full-service support.",
+  "homeFeatures": ["Cross-Country Moves", "Dedicated Support", "Real-Time Tracking"],
+  "icon": "chart",
+  "showInFooter": true,
+  "footerOrder": 2
+}

@@ -1,0 +1,10 @@
+{
+  "order": 4,
+  "title": "Safe Delivery",
+  "description": "We deliver and unload at your new home, right on schedule.",
+  "guideTitle": "Deliver and place",
+  "guideDescription": "Items are unloaded into the right rooms and checked before completion.",
+  "image": "../../assets/steps/step-04.jpg",
+  "imageAlt": "Moving truck on the road for delivery",
+  "icon": "shield-check"
+}

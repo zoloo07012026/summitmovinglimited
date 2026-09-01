@@ -1,0 +1,15 @@
+{
+  "title": "Packing Services",
+  "shortTitle": "Packing Services",
+  "group": "support",
+  "order": 1,
+  "tag": "Pack",
+  "summary": "Full-home, partial, and room-by-room packing with organized labeling for easier unpacking.",
+  "featuredOnHome": true,
+  "homeOrder": 3,
+  "homeSummary": "Professional packing to protect what matters most.",
+  "homeFeatures": ["Full-Service Packing", "Premium Materials", "Custom Crating"],
+  "icon": "box",
+  "showInFooter": true,
+  "footerOrder": 3
+}

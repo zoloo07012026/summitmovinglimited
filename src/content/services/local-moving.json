@@ -1,0 +1,15 @@
+{
+  "title": "Local Residential Moving",
+  "shortTitle": "Local Moving",
+  "group": "core",
+  "order": 1,
+  "tag": "Local",
+  "summary": "Careful moving help for homes, condos, townhomes, and everyday household moves across Chicagoland.",
+  "featuredOnHome": true,
+  "homeOrder": 1,
+  "homeSummary": "Reliable, efficient local moves handled by our expert team.",
+  "homeFeatures": ["Residential Moving", "Apartment Moving", "Same-Day Moves"],
+  "icon": "home",
+  "showInFooter": true,
+  "footerOrder": 1
+}

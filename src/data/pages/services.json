@@ -1,0 +1,39 @@
+{
+  "seo": {
+    "title": "Services",
+    "description": "Local, long-distance, office and short-notice moving across Chicagoland, plus packing, loading, furniture assembly, supplies and unpacking support."
+  },
+  "hero": {
+    "eyebrow": "Moving Services",
+    "heading": "Right-sized moving help for every kind of move.",
+    "lead": "From apartments and family homes to offices, campuses, and short-notice moves, choose the support that fits your timeline and space."
+  },
+  "jumpLinks": [
+    { "label": "Core Moving", "href": "#core-services" },
+    { "label": "Move Support", "href": "#support-services" },
+    { "label": "Get a Quote", "href": "/#quote" }
+  ],
+  "panel": {
+    "text": "Core moving help plus practical support around packing, loading, supplies, and setup.",
+    "stats": [
+      { "label": "Moves handled" },
+      { "label": "Average rating" },
+      { "label": "Emergency support", "value": "24/7" }
+    ]
+  },
+  "coreHead": {
+    "eyebrow": "Moving",
+    "heading": "Core moving services",
+    "text": "Residential, office, house, short-notice, and long-distance moves with the right crew size."
+  },
+  "supportHead": {
+    "eyebrow": "Additional Services",
+    "heading": "Support around the move",
+    "text": "Packing, labor, furniture assembly, moving supplies, and access coordination around the move."
+  },
+  "cta": {
+    "heading": "Tell us what kind of move you are planning.",
+    "text": "We will help match the right service level to your date, route, and home size.",
+    "label": "Get a Free Quote"
+  }
+}
