@@ -665,9 +665,34 @@
   height: 16px;
   color: #6b83a8;
 }
-.search-box span {
+/* Was a <span> that only looked like a control. */
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
   font-size: 13px;
+  color: var(--navy);
+}
+.search-box input::placeholder {
   color: #6b83a8;
+}
+.search-box:focus-within {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(30, 95, 217, 0.12);
+}
+
+/* Shown when a search matches nothing. */
+.post-no-results {
+  background: #fff;
+  border: 1px dashed #c6d8f4;
+  border-radius: 12px;
+  padding: 40px 28px;
+  text-align: center;
+  color: var(--grey-700);
+  font-size: 15px;
 }
 .side-list {
   display: grid;

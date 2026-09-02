@@ -32,32 +32,88 @@ const rest = posts.filter((p) => p !== featured);
           <p>{blogPage.heading.text}</p>
         </div>
 
-        {
-          featured ? (
-            <FeaturedPost post={featured} />
-          ) : (
-            <div class="blog-empty">
-              <h2>{blogPage.empty.heading}</h2>
-              <p>{blogPage.empty.text}</p>
-              <a class="btn btn-outline" href={blogPage.empty.href}>
-                {blogPage.empty.label}
-              </a>
-            </div>
-          )
-        }
+        <div data-search-results>
+          {
+            featured ? (
+              <FeaturedPost post={featured} />
+            ) : (
+              <div class="blog-empty">
+                <h2>{blogPage.empty.heading}</h2>
+                <p>{blogPage.empty.text}</p>
+                <a class="btn btn-outline" href={blogPage.empty.href}>
+                  {blogPage.empty.label}
+                </a>
+              </div>
+            )
+          }
 
-        {
-          rest.length > 0 && (
-            <div class="post-grid">
-              {rest.map((post) => (
-                <PostCard post={post} />
-              ))}
-            </div>
-          )
-        }
+          {
+            rest.length > 0 && (
+              <div class="post-grid">
+                {rest.map((post) => (
+                  <PostCard post={post} />
+                ))}
+              </div>
+            )
+          }
+        </div>
+
+        <p class="post-no-results" hidden data-no-results></p>
       </div>
 
-      <BlogSidebar posts={posts} />
+      <BlogSidebar posts={posts} showSearch />
     </div>
   </section>
 </PageLayout>
+
+<script>
+  /*
+   * Filters the posts already rendered on the page. There is no index to
+   * fetch and no request to make -- every card carries its own searchable
+   * text in a data attribute -- so this works offline and costs nothing until
+   * someone types.
+   *
+   * The input only exists when there are posts to filter; see BlogSidebar.
+   */
+  const input = document.querySelector<HTMLInputElement>('[data-post-search]');
+  const results = document.querySelector<HTMLElement>('[data-search-results]');
+  const empty = document.querySelector<HTMLElement>('[data-no-results]');
+
+  if (input && results && empty) {
+    const cards = [...results.querySelectorAll<HTMLElement>('[data-search-text]')];
+    const grid = results.querySelector<HTMLElement>('.post-grid');
+
+    const apply = () => {
+      const query = input.value.trim().toLowerCase();
+      let shown = 0;
+
+      for (const card of cards) {
+        const text = card.dataset.searchText || '';
+        const match = query === '' || text.includes(query);
+        card.hidden = !match;
+        if (match) shown += 1;
+      }
+
+      // The grid keeps its gaps if it is left displayed with nothing in it.
+      if (grid) {
+        const visible = [...grid.querySelectorAll<HTMLElement>('[data-search-text]')].some(
+          (card) => !card.hidden
+        );
+        grid.hidden = !visible;
+      }
+
+      empty.hidden = shown > 0;
+      empty.textContent = shown > 0 ? '' : 'No posts match “' + input.value.trim() + '”.';
+    };
+
+    input.addEventListener('input', apply);
+
+    // Escape clears the field, which is how a search input is expected to behave.
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        input.value = '';
+        apply();
+      }
+    });
+  }
+</script>

@@ -14,9 +14,15 @@ import type { Post } from '../lib/blog';
  */
 interface Props {
   posts: Post[];
+  /**
+   * The search box only appears where there is a list to filter, so it is off
+   * by default and switched on by /blog/. It was a decorative <span> until
+   * now: it looked like a control and did nothing when clicked.
+   */
+  showSearch?: boolean;
 }
 
-const { posts } = Astro.props;
+const { posts, showSearch = false } = Astro.props;
 const s = blogPage.sidebar;
 
 const categories = site.blogCategories
@@ -25,13 +31,23 @@ const categories = site.blogCategories
 ---
 
 <aside class="blog-sidebar" aria-label="Blog sidebar">
-  <div class="side-card">
-    <h3>{s.searchHeading}</h3>
-    <div class="search-box">
-      <Icon name="search" />
-      <span>{s.searchPlaceholder}</span>
-    </div>
-  </div>
+  {
+    showSearch && posts.length > 0 && (
+      <div class="side-card">
+        <h3>{s.searchHeading}</h3>
+        <div class="search-box">
+          <Icon name="search" />
+          <input
+            type="search"
+            data-post-search
+            placeholder={s.searchPlaceholder}
+            aria-label={s.searchHeading}
+            autocomplete="off"
+          />
+        </div>
+      </div>
+    )
+  }
 
   {
     site.serviceAreas.length > 0 && (

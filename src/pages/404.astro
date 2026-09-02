@@ -1,0 +1,60 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { notFoundPage } from '../lib/pages';
+import { site, phoneHref } from '../lib/site';
+
+/**
+ * Netlify serves dist/404.html for any unmatched path, so this needs no
+ * configuration. Until now that was Netlify's own bare white page: no header,
+ * no navigation, no way back into the site.
+ *
+ * noindex because a 404 that gets indexed competes with the real pages.
+ */
+const { hero, links, cta } = notFoundPage;
+---
+
+<PageLayout
+  title={notFoundPage.seo.title}
+  description={notFoundPage.seo.description}
+  noindex
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="eyebrow">{hero.eyebrow}</div>
+      <h1>{hero.heading}</h1>
+      {hero.lead && <p class="lead">{hero.lead}</p>}
+
+      <div class="service-jump notfound-links">
+        {links.map((link) => <a href={link.href}>{link.label}</a>)}
+      </div>
+
+      <a class="notfound-phone" href={phoneHref}>
+        <Icon name="phone" />
+        {site.phone}
+      </a>
+    </div>
+  </section>
+
+  <CtaBand cta={cta} />
+</PageLayout>
+
+<style>
+  .notfound-links {
+    margin-top: 30px;
+  }
+  .notfound-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+    color: var(--blue);
+    font-weight: 800;
+    font-size: 17px;
+  }
+  .notfound-phone :global(svg) {
+    width: 18px;
+    height: 18px;
+  }
+</style>

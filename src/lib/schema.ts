@@ -271,3 +271,15 @@ export const GuidePageSchema = z.object({
   tips: z.array(CardListSchema).default([]),
   cta: CtaSchema,
 });
+
+/**
+ * The 404 page. Its own file rather than a hardcoded template because a dead
+ * link is often a visitor's first impression, and the way out of it is copy
+ * someone may want to change.
+ */
+export const NotFoundPageSchema = z.object({
+  seo: SeoSchema,
+  hero: PageHeroSchema,
+  links: z.array(LinkSchema).default([]),
+  cta: CtaSchema,
+});

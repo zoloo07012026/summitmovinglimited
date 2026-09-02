@@ -13,9 +13,12 @@ interface Props {
 
 const { post } = Astro.props;
 const { title, description, category, image, imageAlt, readingTime, pubDate } = post.data;
+
+/* Precomputed so the client-side filter never has to read the DOM text. */
+const searchText = `${title} ${description} ${category}`.toLowerCase();
 ---
 
-<a class="post-card" href={postHref(post)}>
+<a class="post-card" href={postHref(post)} data-search-text={searchText}>
   <div class="post-image">
     <span class="post-badge">{category}</span>
     {image && <img src={image} alt={imageAlt} loading="lazy" decoding="async" />}

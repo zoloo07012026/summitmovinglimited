@@ -7,9 +7,11 @@ interface Props {
 
 const { post } = Astro.props;
 const { title, description, readingTime, pubDate } = post.data;
+
+const searchText = `${title} ${description} ${post.data.category}`.toLowerCase();
 ---
 
-<a class="featured-post" href={postHref(post)}>
+<a class="featured-post" href={postHref(post)} data-search-text={searchText}>
   <h2>{title}</h2>
   <p>{description}</p>
   <div class="post-meta">

@@ -1,0 +1,23 @@
+{
+  "seo": {
+    "title": "Page Not Found",
+    "description": "That page does not exist. Use the links here to find moving services, the moving guide, or a quote."
+  },
+  "hero": {
+    "eyebrow": "404",
+    "heading": "That page has moved on without us.",
+    "lead": "The link you followed is out of date or was mistyped. Here is where everything lives now."
+  },
+  "links": [
+    { "label": "Home", "href": "/" },
+    { "label": "Moving Services", "href": "/services/" },
+    { "label": "Moving Guide", "href": "/moving-guide/" },
+    { "label": "Blog", "href": "/blog/" },
+    { "label": "FAQ", "href": "/faq/" }
+  ],
+  "cta": {
+    "heading": "Still looking for something?",
+    "text": "Call us or send the details of your move and we will point you in the right direction.",
+    "label": "Get a Free Quote"
+  }
+}
