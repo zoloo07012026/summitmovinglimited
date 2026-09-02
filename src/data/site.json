@@ -5,18 +5,40 @@
   "address": {
     "street": "10350 Dearlove Rd",
     "city": "Glenview",
-    "state": "IL",
+    "state": "I.L",
     "zip": "60025"
   },
   "hours": [
-    { "label": "Mon - Fri", "value": "8:00 AM - 7:00 PM", "closed": false },
-    { "label": "Saturday", "value": "9:00 AM - 5:00 PM", "closed": false },
-    { "label": "Sunday", "value": "Closed", "closed": true },
-    { "label": "Emergency", "value": "24/7 Support", "closed": false }
+    {
+      "label": "Mon - Fri",
+      "value": "8:00 AM - 7:00 PM",
+      "closed": false
+    },
+    {
+      "label": "Saturday",
+      "value": "9:00 AM - 5:00 PM",
+      "closed": false
+    },
+    {
+      "label": "Sunday",
+      "value": "Closed",
+      "closed": true
+    },
+    {
+      "label": "Emergency",
+      "value": "24/7 Support",
+      "closed": false
+    }
   ],
   "social": [
-    { "network": "facebook", "url": "" },
-    { "network": "instagram", "url": "" }
+    {
+      "network": "facebook",
+      "url": ""
+    },
+    {
+      "network": "instagram",
+      "url": ""
+    }
   ],
   "footerBlurb": "Premium moving services with exceptional care. Licensed, insured, and trusted by thousands of happy clients across the country.",
   "copyrightName": "Summit Moving Limited",
@@ -43,5 +65,5 @@
     "Moving Guides",
     "Company News"
   ],
-  "rating": {}
+  "rating": null
 }
