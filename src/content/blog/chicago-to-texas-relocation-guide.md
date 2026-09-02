@@ -4,6 +4,6 @@ description: A Chicago-to-Texas moving playbook covering real costs, delivery ti
 pubDate: 2026-06-26
 category: Interstate Moving
 readingTime: 9 min
-featured: true
+featured: false
 draft: true
 ---
