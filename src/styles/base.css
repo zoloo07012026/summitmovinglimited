@@ -72,3 +72,22 @@ ul {
     padding: 0 20px;
   }
 }
+
+/*
+ * Available to any component. Text that belongs in the accessible name and in
+ * the anchor text a crawler reads, but not on screen -- see the "Learn More"
+ * links on the home page, where three identical labels pointed at three
+ * different services.
+ */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

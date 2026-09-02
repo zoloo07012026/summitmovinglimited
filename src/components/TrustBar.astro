@@ -27,7 +27,7 @@ const { items } = Astro.props;
           <Icon name={item.icon} />
         </div>
         <div>
-          <h4>{stat(item.heading)}</h4>
+          <div class="trust-title">{stat(item.heading)}</div>
           <p>{item.text}</p>
         </div>
       </div>
@@ -80,7 +80,9 @@ const { items } = Astro.props;
     width: 18px;
     height: 18px;
   }
-  .trust-item h4 {
+  /* Not a heading: a label above its value, so it stays out of the document
+     outline. A <p> here would inherit .trust-item p and change the size. */
+  .trust-item .trust-title {
     font-size: 14px;
     font-weight: 800;
     margin-bottom: 1px;

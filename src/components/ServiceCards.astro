@@ -28,27 +28,38 @@ const { servicesHead: head, servicesLinkLabel } = homePage;
 
     <div class="services-grid">
       {
-        featured.map((service) => (
-          <div class="service-card">
-            <div class="service-head">
-              <div class="service-img">{service.data.icon && <Icon name={service.data.icon} />}</div>
-              <h3>{service.data.shortTitle ?? service.data.title}</h3>
+        featured.map((service) => {
+          // Three links all reading "Learn More" tell a screen reader and a crawler
+          // nothing about where they go. The service name is added inside the anchor
+          // but hidden from view, so the anchor text is descriptive and the card looks
+          // exactly as it did.
+          const cardTitle = service.data.shortTitle ?? service.data.title;
+
+          return (
+            <div class="service-card">
+              <div class="service-head">
+                <div class="service-img">
+                  {service.data.icon && <Icon name={service.data.icon} />}
+                </div>
+                <h3>{cardTitle}</h3>
+              </div>
+              <p>{service.data.homeSummary ?? service.data.summary}</p>
+              <ul class="service-list">
+                {service.data.homeFeatures.map((feature) => (
+                  <li>
+                    <Icon name="check-circle" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              <a href={`/services/#${service.id}`} class="learn-more">
+                {servicesLinkLabel}
+                <span class="visually-hidden"> about {cardTitle}</span>
+                <Icon name="arrow" />
+              </a>
             </div>
-            <p>{service.data.homeSummary ?? service.data.summary}</p>
-            <ul class="service-list">
-              {service.data.homeFeatures.map((feature) => (
-                <li>
-                  <Icon name="check-circle" />
-                  {feature}
-                </li>
-              ))}
-            </ul>
-            <a href={`/services/#${service.id}`} class="learn-more">
-              {servicesLinkLabel}
-              <Icon name="arrow" />
-            </a>
-          </div>
-        ))
+          );
+        })
       }
     </div>
   </div>

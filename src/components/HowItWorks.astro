@@ -46,7 +46,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
               </div>
             </div>
             <div class="how-icon">{step.data.icon && <Icon name={step.data.icon} />}</div>
-            <h4>{step.data.title}</h4>
+            <h3>{step.data.title}</h3>
             <p>{step.data.description}</p>
           </div>
         ))
@@ -184,7 +184,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
     width: 23px;
     height: 23px;
   }
-  .how-card h4 {
+  .how-card h3 {
     position: relative;
     z-index: 1;
     font-size: 18px;
