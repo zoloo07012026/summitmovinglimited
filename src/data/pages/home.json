@@ -1,0 +1,78 @@
+{
+  "seo": {
+    "title": "Movers in Chicagoland",
+    "titleOverride": "Summit Moving Limited | Smart, Seamless Moves Start Here",
+    "description": "Summit Moving Limited handles local, long-distance, apartment and office moves across Chicagoland, with packing, loading and specialty item care. Get a free quote."
+  },
+  "hero": {
+    "eyebrow": "PREMIUM MOVING. EXCEPTIONAL CARE.",
+    "headingLead": "Smart, seamless",
+    "headingAccent": "moves start here",
+    "sub": "From local moves to long-distance relocations, we deliver a smooth, stress-free experience—every step of the way.",
+    "ctaLabel": "Get a Free Quote"
+  },
+  "trust": [
+    {
+      "icon": "shield-check",
+      "heading": "Licensed & Insured",
+      "text": "Your belongings are safe with us"
+    },
+    { "icon": "users", "heading": "", "text": "Moves completed" },
+    { "icon": "star", "heading": "", "text": "Customer rating" },
+    {
+      "icon": "clock",
+      "heading": "On-Time Promise",
+      "text": "We value your time as much as you do"
+    }
+  ],
+  "servicesHead": {
+    "eyebrow": "OUR SERVICES",
+    "heading": "Tailored Moving Solutions",
+    "text": "Professional services designed to meet your unique moving needs."
+  },
+  "servicesLinkLabel": "Learn More",
+  "howHead": {
+    "eyebrow": "HOW IT WORKS",
+    "heading": "Moving Made Simple",
+    "text": "Four straightforward steps from quote to keys-down at your new place."
+  },
+  "howCtaLabel": "Get a Free Quote",
+  "testimonialsHead": {
+    "eyebrow": "CUSTOMER REVIEWS",
+    "heading": "What Our Customers Say",
+    "text": "Reviews from people we have moved across Chicagoland."
+  },
+  "why": {
+    "eyebrow": "WHY CHOOSE US",
+    "headingLines": ["Moving Is Stressful.", "Working With Us Isn't."],
+    "lead": "We built Summit Moving around one idea: your move should feel handled, not chaotic.",
+    "points": [
+      {
+        "icon": "shield",
+        "heading": "Fully Licensed & Insured",
+        "text": "Every move is covered, every item is protected."
+      },
+      {
+        "icon": "clock",
+        "heading": "Transparent, Upfront Pricing",
+        "text": "No hidden fees, no surprise charges on move day."
+      },
+      {
+        "icon": "users-solo",
+        "heading": "Trained, Background-Checked Crews",
+        "text": "Real movers who treat your home like their own."
+      }
+    ],
+    "stats": [
+      { "label": "Successful Moves" },
+      { "label": "Average Rating" },
+      { "label": "Years in Business" },
+      { "label": "On-Time Delivery" }
+    ]
+  },
+  "cta": {
+    "heading": "Ready for a Smarter Move?",
+    "text": "Get a free, no-obligation quote in minutes. Our team is standing by to help you plan every detail.",
+    "label": "Get a Free Quote"
+  }
+}

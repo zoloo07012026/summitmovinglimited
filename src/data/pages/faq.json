@@ -1,0 +1,20 @@
+{
+  "seo": {
+    "title": "FAQ",
+    "description": "Answers to the questions customers ask most before booking a move: quotes, packing, timing, coverage, specialty items and rescheduling."
+  },
+  "hero": {
+    "eyebrow": "FAQ",
+    "heading": "Answers before you book your move.",
+    "lead": "Here are the questions customers usually ask before requesting a quote or confirming a move date."
+  },
+  "panel": {
+    "strong": "Quick answers",
+    "text": "Pricing, packing, timing, coverage, and move-day details."
+  },
+  "cta": {
+    "heading": "Still have a question?",
+    "text": "Send us the details and a Summit Moving specialist will help you sort out the right next step.",
+    "label": "Ask Through Quote Form"
+  }
+}

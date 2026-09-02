@@ -1,0 +1,76 @@
+{
+  "seo": {
+    "title": "Moving Guide",
+    "description": "A step-by-step moving guide covering the timeline from quote to delivery, what to prepare before the crew arrives, packing order and building access notes."
+  },
+  "hero": {
+    "eyebrow": "Moving Guide",
+    "heading": "A practical plan for a calmer move day.",
+    "lead": "Use this guide to understand the basic timeline, packing priorities, and what our crew handles when they arrive."
+  },
+  "panel": {
+    "text": "Quote, schedule, pack and load, deliver and place."
+  },
+  "processHead": {
+    "eyebrow": "How It Works",
+    "heading": "From quote to keys-down.",
+    "text": "We keep the process simple so you know what is happening before, during, and after moving day."
+  },
+  "checklistHead": {
+    "eyebrow": "Moving Checklist",
+    "heading": "What to prepare before the crew arrives."
+  },
+  "checklist": [
+    {
+      "heading": "1 week before",
+      "items": [
+        "Confirm elevator or parking access",
+        "Separate items you will carry yourself",
+        "Label rooms clearly"
+      ]
+    },
+    {
+      "heading": "1 day before",
+      "items": [
+        "Clear walkways and entry points",
+        "Pack personal essentials",
+        "Defrost or disconnect appliances if needed"
+      ]
+    },
+    {
+      "heading": "Move day",
+      "items": [
+        "Walk the crew through priorities",
+        "Point out fragile or specialty items",
+        "Review final room placement"
+      ]
+    }
+  ],
+  "tips": [
+    {
+      "heading": "Packing Guide",
+      "text": "Start with low-use items, keep boxes room-specific, and avoid overpacking heavy boxes.",
+      "items": [
+        "Use small boxes for books and dense items",
+        "Wrap glassware and dishes individually",
+        "Mark fragile boxes on multiple sides",
+        "Keep medications and documents with you"
+      ]
+    },
+    {
+      "heading": "Building Access Notes",
+      "text": "A few access details can prevent delays and extra stress on move day.",
+      "items": [
+        "Reserve elevators where required",
+        "Confirm loading dock or street parking rules",
+        "Measure tight stairways or hallways",
+        "Share gate codes or concierge instructions"
+      ]
+    }
+  ],
+  "cta": {
+    "heading": "Need help choosing the right plan?",
+    "text": "Send us the basics and we will help map out the best next step.",
+    "label": "Start a Quote"
+  }
+}

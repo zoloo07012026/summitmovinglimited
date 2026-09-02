@@ -1,0 +1,1053 @@
+/*
+ * Styles for the interior pages (services, blog, faq, moving guide, legal).
+ * Ported from page.css, minus the header, footer, reset and button layers that
+ * now live in components and the shared stylesheets.
+ *
+ * Imported by PageLayout ONLY. The home page never loads this file, exactly as
+ * index.html never loaded page.css.
+ *
+ * A handful of selectors below exist on BOTH the home page and the interior
+ * pages with different values. Those are scoped under `.is-interior` (the class
+ * PageLayout puts on <main>) so that even if a future bundler decides to merge
+ * every stylesheet into one file, the home page cannot be restyled by accident.
+ * Everything else is unique to these pages and stays unscoped.
+ */
+
+/* ---------- Diverged from index.html: must stay scoped ---------- */
+
+/* home: 14px / .08em / 700 / mb 14, not uppercase */
+.is-interior .eyebrow {
+  color: var(--blue);
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+/* home only ever styles `.hero h1` */
+.is-interior h1 {
+  font-size: clamp(38px, 4.5vw, 58px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+
+/* home: `.why-section p.lead` at 16.5px/#c7d3ef */
+.is-interior .lead {
+  margin-top: 18px;
+  color: var(--grey-700);
+  font-size: 18px;
+  max-width: 680px;
+}
+
+/* home: --section-y 64px */
+.is-interior {
+  --section-y: 68px;
+}
+.is-interior .section {
+  padding: var(--section-y) 0;
+}
+.is-interior .section.alt {
+  background: var(--white);
+}
+
+/* home: max-width 640 / mb 34 / h2 clamp(...,38px) */
+.is-interior .section-head {
+  max-width: 720px;
+  margin: 0 auto 36px;
+  text-align: center;
+}
+.is-interior .section-head h2 {
+  font-size: clamp(28px, 3vw, 40px);
+  line-height: 1.15;
+}
+.is-interior .section-head p {
+  margin-top: 12px;
+  color: var(--grey-700);
+  font-size: 16px;
+}
+
+/* home: photo background (--image-cta) and 54/48 padding */
+.is-interior .cta-band {
+  background: linear-gradient(135deg, var(--blue), #1746a3);
+  color: #fff;
+  border-radius: 14px;
+  padding: 46px;
+  text-align: center;
+}
+.is-interior .cta-band p {
+  color: #dbe6ff;
+  margin: 10px auto 24px;
+  max-width: 620px;
+}
+
+/* ---------- Page hero ---------- */
+
+.page-hero {
+  padding: 74px 0 54px;
+  background: linear-gradient(180deg, #fff 0%, #edf4ff 100%);
+  border-bottom: 1px solid var(--grey-200);
+}
+.page-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 48px;
+  align-items: end;
+}
+.hero-panel {
+  background: var(--navy);
+  color: #dbe6ff;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: var(--shadow-lg);
+}
+.hero-panel strong {
+  display: block;
+  color: #fff;
+  font-size: 34px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+/* ---------- Services page ---------- */
+
+.services-page {
+  background:
+    radial-gradient(circle at 12% 12%, rgba(30, 95, 217, 0.08), transparent 30%),
+    linear-gradient(180deg, #f8fbff 0%, #fff 48%, #f8fbff 100%);
+}
+.services-hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.9) 52%, rgba(234, 241, 255, 0.82) 100%),
+    linear-gradient(135deg, #fff, #eaf1ff);
+}
+.services-hero::after {
+  content: '';
+  position: absolute;
+  right: -80px;
+  top: -90px;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: rgba(30, 95, 217, 0.08);
+  pointer-events: none;
+}
+.services-hero .page-hero-grid {
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 430px);
+}
+.service-hero-card {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+.service-hero-card > span {
+  display: block;
+  color: #c7d3ef;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.service-hero-stats {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+.service-hero-stats div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+.service-hero-stats b {
+  color: #fff;
+  font-size: 20px;
+}
+.service-hero-stats span {
+  color: #aebbdd;
+  font-size: 13px;
+  text-align: right;
+}
+.service-jump {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 26px;
+}
+.service-jump a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 8px 13px;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.84);
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: var(--shadow-sm);
+}
+.service-jump a:hover {
+  border-color: #bcd0f2;
+  color: var(--blue);
+  background: #fff;
+}
+.service-band {
+  position: relative;
+}
+/* Scoped only to outrank `.is-interior .section.alt` above, which would
+   otherwise flatten this gradient to plain white. In page.css the two rules
+   had equal specificity and this one simply came later. */
+.is-interior .service-band.alt {
+  background: linear-gradient(180deg, #fff 0%, #f8fbff 100%);
+}
+.service-section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 390px);
+  gap: 34px;
+  align-items: end;
+  padding-bottom: 22px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--grey-200);
+}
+.service-section-head h2 {
+  font-size: clamp(30px, 3.2vw, 42px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.service-section-head p {
+  color: var(--grey-700);
+  font-size: 15px;
+}
+.service-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  counter-reset: services;
+}
+.service-tile {
+  position: relative;
+  overflow: hidden;
+  counter-increment: services;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 10px 28px rgba(12, 27, 58, 0.06);
+  min-height: 188px;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+}
+.service-tile::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--blue-light));
+}
+.service-tile::after {
+  content: counter(services, decimal-leading-zero);
+  position: absolute;
+  right: 20px;
+  top: 18px;
+  color: #d8e5fb;
+  font-size: 34px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+.service-tile:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 42px rgba(12, 27, 58, 0.11);
+  border-color: #c6d8f4;
+  background: #fff;
+}
+.service-tile .tag {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: var(--blue-pale);
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 900;
+  margin-bottom: 24px;
+}
+.service-tile h3 {
+  position: relative;
+  z-index: 1;
+  font-size: 18px;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+.service-tile p {
+  position: relative;
+  z-index: 1;
+  color: var(--grey-700);
+  font-size: 14px;
+  line-height: 1.65;
+}
+/*
+ * Five tiles in a 3-up grid: the last two are pulled to straddle the centre.
+ * This counts DIRECT children, so ServiceTiles.astro must render .service-tile
+ * as an immediate child of the grid -- adding a wrapper element breaks it.
+ */
+.support-grid {
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: center;
+}
+.support-grid .service-tile {
+  grid-column: auto;
+}
+.support-grid .service-tile:nth-last-child(2) {
+  grid-column: 1 / 2;
+  transform: translateX(50%);
+}
+.support-grid .service-tile:last-child {
+  grid-column: 3 / 4;
+  transform: translateX(-50%);
+}
+.support-grid .service-tile:hover {
+  transform: translateY(-3px);
+}
+.support-grid .service-tile:nth-last-child(2):hover {
+  transform: translateX(50%) translateY(-3px);
+}
+.support-grid .service-tile:last-child:hover {
+  transform: translateX(-50%) translateY(-3px);
+}
+.core-service-grid .service-tile:nth-last-child(2) {
+  grid-column: 1 / 2;
+  transform: translateX(50%);
+}
+.core-service-grid .service-tile:last-child {
+  grid-column: 3 / 4;
+  transform: translateX(-50%);
+}
+.core-service-grid .service-tile:nth-last-child(2):hover {
+  transform: translateX(50%) translateY(-3px);
+}
+.core-service-grid .service-tile:last-child:hover {
+  transform: translateX(-50%) translateY(-3px);
+}
+/* Same reason as .service-band.alt: without the scope this loses to
+   `.is-interior .section` and the band drops 24px down the page. */
+.is-interior .service-cta-section {
+  padding-top: 44px;
+}
+.service-cta {
+  box-shadow: var(--shadow-lg);
+}
+
+/* ---------- Generic cards / grids ---------- */
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.card {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 26px;
+  box-shadow: var(--shadow-sm);
+}
+.card h3 {
+  font-size: 21px;
+  margin-bottom: 10px;
+}
+.card p {
+  color: var(--grey-700);
+  font-size: 15px;
+}
+.feature-list {
+  margin-top: 18px;
+}
+.feature-list li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  color: var(--navy);
+  font-weight: 650;
+  font-size: 14.5px;
+}
+.check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--blue-pale);
+  color: var(--blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 900;
+  margin-top: 1px;
+}
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.step-list {
+  counter-reset: steps;
+}
+.step-row {
+  counter-increment: steps;
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--grey-200);
+}
+.step-row:last-child {
+  border-bottom: none;
+}
+.step-row::before {
+  content: counter(steps, decimal-leading-zero);
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--blue-pale);
+  color: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+}
+
+/* ---------- FAQ (native <details>, no JS) ---------- */
+
+.faq-list {
+  display: grid;
+  gap: 14px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.faq-list details {
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+}
+.faq-list summary {
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 16px;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+.faq-list summary::-webkit-details-marker {
+  display: none;
+}
+.faq-list summary::after {
+  content: '+';
+  color: var(--blue);
+  font-size: 20px;
+  line-height: 1;
+}
+.faq-list details[open] summary::after {
+  content: '-';
+}
+.faq-list details p {
+  margin-top: 12px;
+  color: var(--grey-700);
+}
+
+/* ---------- Blog ---------- */
+
+.blog-page {
+  background:
+    radial-gradient(circle at 12% 4%, rgba(30, 95, 217, 0.12), transparent 32%),
+    radial-gradient(circle at 88% 18%, rgba(59, 123, 245, 0.1), transparent 30%),
+    linear-gradient(180deg, #f8fbff 0%, #fff 42%, #f3f7ff 100%);
+}
+.blog-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 28px;
+  align-items: start;
+}
+.blog-main {
+  min-width: 0;
+}
+.blog-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+.blog-heading h1,
+.blog-heading h2 {
+  font-size: clamp(30px, 3.4vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.blog-heading p {
+  max-width: 460px;
+  color: var(--grey-700);
+  font-size: 15px;
+}
+.featured-post {
+  display: block;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 30px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-lg);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.featured-post:hover {
+  transform: translateY(-2px);
+  border-color: #c6d8f4;
+  box-shadow: 0 28px 70px rgba(12, 27, 58, 0.16);
+}
+.featured-post h2 {
+  font-size: clamp(28px, 3.1vw, 40px);
+  line-height: 1.18;
+  max-width: 860px;
+  margin-bottom: 12px;
+}
+.featured-post p {
+  color: var(--grey-700);
+  font-size: 16px;
+  max-width: 900px;
+  margin-bottom: 20px;
+}
+.post-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  color: #56709b;
+  font-size: 13px;
+}
+.post-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.post-card {
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  min-height: 398px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.post-card:hover {
+  transform: translateY(-3px);
+  border-color: #c6d8f4;
+  box-shadow: 0 18px 42px rgba(12, 27, 58, 0.13);
+}
+.post-image {
+  position: relative;
+  height: 164px;
+  flex: 0 0 164px;
+  background: linear-gradient(135deg, #dbeafe, #eff6ff);
+  overflow: hidden;
+}
+.post-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(0.92) contrast(0.96);
+}
+.post-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(12, 27, 58, 0.04), rgba(12, 27, 58, 0.22));
+}
+.post-badge {
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  z-index: 1;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+}
+.post-body {
+  padding: 22px 22px 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.post-body h3 {
+  font-size: 20px;
+  line-height: 1.28;
+  margin-bottom: 10px;
+}
+.post-body p {
+  color: var(--grey-700);
+  font-size: 14px;
+  line-height: 1.55;
+  margin-bottom: 18px;
+}
+.post-body .post-meta {
+  margin-top: auto;
+}
+.blog-sidebar {
+  display: grid;
+  gap: 18px;
+  position: sticky;
+  /* Was a hardcoded 124px; now derived so it tracks the header height. */
+  top: calc(var(--header-h) + var(--header-gap));
+}
+.side-card {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 22px;
+  box-shadow: var(--shadow-md);
+}
+.side-card.accent {
+  border-color: #bcd0f2;
+  background: linear-gradient(135deg, #fff, #f3f7ff);
+}
+.side-card h3 {
+  font-size: 18px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.side-card h3 svg {
+  width: 18px;
+  height: 18px;
+  color: var(--blue);
+}
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 0 12px;
+  color: #56709b;
+  background: #fff;
+}
+.search-box svg {
+  width: 16px;
+  height: 16px;
+  color: #6b83a8;
+}
+.search-box span {
+  font-size: 13px;
+  color: #6b83a8;
+}
+.side-list {
+  display: grid;
+  gap: 10px;
+}
+.side-list li {
+  color: var(--navy);
+  font-size: 14px;
+}
+.side-list li::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--blue-light);
+  margin-right: 9px;
+  vertical-align: middle;
+}
+.side-link {
+  display: inline-flex;
+  margin-top: 14px;
+  color: var(--blue);
+  font-size: 14px;
+  font-weight: 800;
+}
+.rating {
+  text-align: center;
+}
+.rating .stars {
+  color: #fbbc04;
+  letter-spacing: 2px;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+.rating strong {
+  display: block;
+  font-size: 26px;
+  color: var(--navy);
+  line-height: 1;
+}
+.rating span {
+  display: block;
+  color: #56709b;
+  font-size: 13px;
+  margin-top: 6px;
+}
+.category-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--navy);
+}
+.category-row b {
+  min-width: 30px;
+  text-align: center;
+  border-radius: 999px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 12px;
+  padding: 2px 8px;
+}
+
+/* ---------- Legal pages ---------- */
+
+.legal-hero {
+  padding: 72px 0 56px;
+  background: linear-gradient(180deg, #fff 0%, #edf4ff 100%);
+  border-bottom: 1px solid var(--grey-200);
+}
+.legal-hero .eyebrow {
+  color: var(--blue);
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+.legal-hero h1 {
+  font-size: clamp(48px, 7vw, 76px);
+  letter-spacing: -0.03em;
+  color: #1f2933;
+}
+.legal-content {
+  padding: 72px 0 84px;
+  background: #fff;
+}
+.legal-content .wrap {
+  max-width: 900px;
+}
+.legal-updated {
+  color: var(--grey-700);
+  font-size: 14px;
+  margin-bottom: 34px;
+}
+.legal-block {
+  margin-bottom: 34px;
+}
+.legal-block h2 {
+  font-size: clamp(24px, 2.5vw, 30px);
+  line-height: 1.18;
+  margin-bottom: 12px;
+  color: var(--navy);
+}
+.legal-block p {
+  color: var(--grey-700);
+  font-size: 15px;
+  line-height: 1.8;
+}
+.legal-block a {
+  color: var(--blue);
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/*
+ * The legal copy is Markdown now, so it renders as a flat run of <h2>/<p>
+ * rather than the old .legal-block wrappers. Putting the 34px gap on the
+ * paragraph instead of the wrapper reproduces the original rhythm exactly.
+ */
+.legal-body h2 {
+  font-size: clamp(24px, 2.5vw, 30px);
+  line-height: 1.18;
+  margin-bottom: 12px;
+  color: var(--navy);
+}
+.legal-body p {
+  color: var(--grey-700);
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 34px;
+}
+/* The original .legal-block carried its 34px margin on every block including
+   the last one, so the trailing gap is kept rather than trimmed. */
+.legal-body a {
+  color: var(--blue);
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- Blog: empty state and single post ---------- */
+
+/*
+ * A designed surface, not a fallback. Every seeded post ships as a draft, so
+ * this is genuinely what /blog/ looks like until someone writes one. The
+ * dashed border says "nothing here yet" instead of pretending to be a card.
+ */
+.blog-empty {
+  background: #fff;
+  border: 1px dashed #c6d8f4;
+  border-radius: 14px;
+  padding: 54px 32px;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+}
+.blog-empty h2 {
+  font-size: 26px;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.blog-empty p {
+  color: var(--grey-700);
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 0 auto 26px;
+}
+
+.post-hero .post-meta {
+  margin-top: 20px;
+}
+.post-cover {
+  display: block;
+  width: 100%;
+  border-radius: 14px;
+  margin-bottom: 30px;
+  box-shadow: var(--shadow-md);
+}
+
+/* Post bodies are Markdown, on the same reading rhythm as .legal-body. */
+.post-prose {
+  max-width: 760px;
+}
+.post-prose h2 {
+  font-size: clamp(24px, 2.5vw, 30px);
+  line-height: 1.18;
+  margin-bottom: 12px;
+  color: var(--navy);
+}
+.post-prose h3 {
+  font-size: 20px;
+  line-height: 1.3;
+  margin-bottom: 10px;
+  color: var(--navy);
+}
+.post-prose p,
+.post-prose li {
+  color: var(--grey-700);
+  font-size: 16px;
+  line-height: 1.8;
+}
+.post-prose p {
+  margin-bottom: 26px;
+}
+/* base.css strips list markers site-wide; prose is the one place they belong. */
+.post-prose ul,
+.post-prose ol {
+  margin: 0 0 26px 22px;
+  list-style: disc;
+}
+.post-prose ol {
+  list-style: decimal;
+}
+.post-prose li {
+  margin-bottom: 8px;
+}
+.post-prose blockquote {
+  margin: 0 0 26px;
+  padding: 16px 22px;
+  border-left: 3px solid var(--blue);
+  background: rgba(30, 95, 217, 0.05);
+  border-radius: 0 10px 10px 0;
+  color: var(--navy);
+}
+.post-prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+.post-prose img {
+  display: block;
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 26px;
+}
+.post-prose a {
+  color: var(--blue);
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.post-prose > *:last-child {
+  margin-bottom: 0;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .page-hero-grid,
+  .service-section-head,
+  .service-card-grid,
+  .support-grid,
+  .blog-shell,
+  .post-grid,
+  .grid-3,
+  .grid-2,
+  .split {
+    grid-template-columns: 1fr;
+  }
+  .services-hero .page-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 26px;
+    align-items: start;
+  }
+  .support-grid .service-tile,
+  .support-grid .service-tile:nth-last-child(2),
+  .support-grid .service-tile:last-child,
+  .core-service-grid .service-tile:nth-last-child(2),
+  .core-service-grid .service-tile:last-child {
+    grid-column: auto;
+    transform: none;
+  }
+  .hero-panel {
+    max-width: 100%;
+  }
+  .blog-sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-hero {
+    padding: 42px 0 34px;
+  }
+  .services-hero {
+    background: linear-gradient(180deg, #fff 0%, #eef5ff 100%);
+  }
+  .services-hero::after {
+    right: -96px;
+    top: -78px;
+    width: 230px;
+    height: 230px;
+    opacity: 0.75;
+  }
+  .services-hero .page-hero-grid {
+    gap: 22px;
+  }
+  .services-hero h1 {
+    max-width: 310px;
+    font-size: clamp(34px, 10vw, 42px);
+    line-height: 1.05;
+  }
+  .services-hero .lead {
+    max-width: 320px;
+    font-size: 15.5px;
+    line-height: 1.65;
+  }
+  .service-jump {
+    gap: 8px;
+    margin-top: 20px;
+  }
+  .service-jump a {
+    min-height: 36px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  .service-hero-card {
+    padding: 20px;
+    border-radius: 12px;
+  }
+  .service-hero-card strong {
+    font-size: 28px;
+  }
+  .service-hero-card > span {
+    font-size: 14px;
+  }
+  .blog-shell {
+    gap: 24px;
+  }
+  .blog-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .blog-heading h1 {
+    max-width: 300px;
+    font-size: clamp(30px, 9vw, 38px);
+    line-height: 1.08;
+  }
+  .blog-heading p {
+    max-width: 320px;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  .featured-post {
+    padding: 22px;
+    border-radius: 12px;
+    margin-bottom: 26px;
+  }
+  .featured-post h2 {
+    font-size: 24px;
+    line-height: 1.18;
+  }
+  .featured-post p {
+    font-size: 14.5px;
+    line-height: 1.65;
+  }
+  .post-grid {
+    gap: 18px;
+  }
+  .post-card {
+    min-height: 0;
+  }
+  .post-image {
+    height: 156px;
+    flex-basis: 156px;
+  }
+  .post-body {
+    padding: 18px;
+  }
+  .post-body h3 {
+    font-size: 19px;
+  }
+  .is-interior {
+    --section-y: 52px;
+  }
+  .card,
+  .is-interior .cta-band {
+    padding: 22px;
+  }
+}

@@ -1,0 +1,19 @@
+---
+import { postHref, formatDate, type Post } from '../lib/blog';
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { title, description, readingTime, pubDate } = post.data;
+---
+
+<a class="featured-post" href={postHref(post)}>
+  <h2>{title}</h2>
+  <p>{description}</p>
+  <div class="post-meta">
+    <span>{formatDate(pubDate)}</span>
+    {readingTime && <span>{readingTime} read</span>}
+  </div>
+</a>

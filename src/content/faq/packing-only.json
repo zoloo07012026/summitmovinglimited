@@ -1,0 +1,6 @@
+{
+    "question":  "Can I book packing only?",
+    "answer":  "Yes. You can request full-service packing, partial packing, or help with fragile rooms like kitchens, artwork, or glassware.",
+    "order":  3,
+    "openByDefault":  false
+}

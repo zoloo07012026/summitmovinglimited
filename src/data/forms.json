@@ -1,0 +1,51 @@
+{
+  "endpoint": "https://formspree.io/f/maqgvgyk",
+  "subject": "New quote request from Summit Moving website",
+  "heading": "Get a Free Quote",
+  "sub": "Fast. Easy. No obligation.",
+  "stepLabels": ["Move Details", "Your Info", "Review"],
+  "nextLabel": "Next Step",
+  "submitLabel": "Submit Request",
+  "sendingLabel": "Sending...",
+  "secureNote": "Your information is secure and encrypted",
+  "successHeading": "Request Received!",
+  "successText": "A Summit Moving specialist will call you within 1 business hour.",
+  "errorText": "Something went wrong. Please try again or call {phone}.",
+  "notProvided": "Not provided",
+  "noneSelected": "None selected",
+  "routeJoiner": " to ",
+  "moveTypes": [
+    "Local Move",
+    "Long-Distance Move",
+    "Apartment Move",
+    "Office / Commercial Move"
+  ],
+  "homeSizes": ["Studio", "1 Bedroom", "2 Bedroom", "3 Bedroom", "4+ Bedroom", "Office"],
+  "additionalServices": ["Packing", "Specialty Items"],
+  "fields": {
+    "moveType": { "label": "Move Type", "placeholder": "Select move type" },
+    "moveFrom": { "label": "Move From", "placeholder": "City, State or ZIP" },
+    "moveTo": { "label": "Move To", "placeholder": "City, State or ZIP" },
+    "moveDate": { "label": "Move Date", "placeholder": "Select date" },
+    "homeSize": { "label": "Home Size", "placeholder": "Select size" },
+    "services": { "label": "Additional Services", "placeholder": "" },
+    "firstName": { "label": "First Name", "placeholder": "First name" },
+    "lastName": { "label": "Last Name", "placeholder": "Last name" },
+    "email": { "label": "Email Address", "placeholder": "you@example.com" },
+    "phone": { "label": "Phone Number", "placeholder": "(847) 370-5754" },
+    "notes": {
+      "label": "Move Notes",
+      "placeholder": "Elevators, stairs, fragile items, timing..."
+    }
+  },
+  "reviewLabels": {
+    "moveType": "Move Type",
+    "route": "Route",
+    "moveDate": "Move Date",
+    "homeSize": "Home Size",
+    "services": "Services",
+    "name": "Name",
+    "contact": "Contact",
+    "notes": "Notes"
+  }
+}

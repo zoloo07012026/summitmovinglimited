@@ -1,0 +1,6 @@
+Real customer reviews go here, one JSON file each. See the testimonials
+collection in src/content.config.ts for the fields.
+
+The folder is empty on purpose: the home page's review section stays hidden
+until there is something true to put in it. Add one entry and the section
+appears, with the marquee already working.

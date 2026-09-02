@@ -1,0 +1,10 @@
+{
+  "order": 2,
+  "title": "Schedule Your Date",
+  "description": "Pick a moving date that works for you—we'll lock it in.",
+  "guideTitle": "Confirm the plan",
+  "guideDescription": "We lock in timing, access notes, building rules, and crew requirements.",
+  "image": "../../assets/steps/step-02.jpg",
+  "imageAlt": "Calendar and planning notebook",
+  "icon": "calendar"
+}

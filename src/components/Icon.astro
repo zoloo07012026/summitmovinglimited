@@ -1,0 +1,35 @@
+---
+import { icons, defaultStrokeWidth, isIconName, type IconName } from '../lib/icons';
+
+/**
+ * Renders one of the shared inline SVGs. See src/lib/icons.ts for the map and
+ * why the stroke width lives beside the paths rather than in the content.
+ *
+ * `name` accepts a plain string so that content and CMS fields can feed it
+ * directly; an unrecognised value fails the build rather than rendering an
+ * empty box that nobody notices until it is live.
+ */
+interface Props {
+  name: IconName | (string & {});
+  class?: string;
+  /** Overrides the icon's natural weight. Rarely needed. */
+  strokeWidth?: number | string;
+}
+
+const { name, class: className, strokeWidth } = Astro.props;
+
+if (!isIconName(name)) {
+  throw new Error(`Unknown icon "${name}". Add it to src/lib/icons.ts or fix the content field.`);
+}
+
+const width = strokeWidth ?? defaultStrokeWidth[name];
+---
+
+<svg
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke-width={width}
+  class={className}
+  aria-hidden="true"
+  set:html={icons[name]}
+/>

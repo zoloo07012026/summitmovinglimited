@@ -1,0 +1,62 @@
+---
+import { stat } from '../lib/site';
+import type { HeroPanel, Link, PageHero } from '../lib/schema';
+
+/**
+ * The eyebrow / h1 / lead block plus the navy panel that opens every interior
+ * page. Three pages used to carry three near-identical copies of this markup.
+ *
+ * The panel's headline figure is a prop rather than page copy so a page can
+ * count a collection instead of hardcoding a number that goes stale the moment
+ * a service is added -- which is exactly what "10 services" had done.
+ */
+interface Props {
+  hero: PageHero;
+  panel: HeroPanel;
+  /** Overrides panel.strong. Omit both and the panel has no headline. */
+  strong?: string;
+  jumpLinks?: Link[];
+  /** Extra class on the <section>, e.g. "services-hero". */
+  sectionClass?: string;
+  /** Extra class on the panel, e.g. "service-hero-card". */
+  panelClass?: string;
+}
+
+const { hero, panel, strong, jumpLinks = [], sectionClass, panelClass } = Astro.props;
+const headline = strong ?? panel.strong;
+---
+
+<section class:list={['page-hero', sectionClass]}>
+  <div class="wrap page-hero-grid">
+    <div>
+      <div class="eyebrow">{hero.eyebrow}</div>
+      <h1>{hero.heading}</h1>
+      {hero.lead && <p class="lead">{hero.lead}</p>}
+      {
+        jumpLinks.length > 0 && (
+          <div class="service-jump">
+            {jumpLinks.map((link) => (
+              <a href={link.href}>{link.label}</a>
+            ))}
+          </div>
+        )
+      }
+    </div>
+    <div class:list={['hero-panel', panelClass]}>
+      {headline && <strong>{headline}</strong>}
+      <span>{panel.text}</span>
+      {
+        panel.stats.length > 0 && (
+          <div class="service-hero-stats">
+            {panel.stats.map((s) => (
+              <div>
+                <b>{stat(s.value)}</b>
+                <span>{s.label}</span>
+              </div>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>

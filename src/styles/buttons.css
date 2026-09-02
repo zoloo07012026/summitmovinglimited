@@ -1,0 +1,74 @@
+/*
+ * The union of the button systems from index.html and page.css.
+ *
+ * Merging is lossless because the variants are used on disjoint pages:
+ *   .btn-white / .btn-ghost-white  -> home page only
+ *   .btn-outline                   -> interior CTA bands only
+ *   .btn / .btn-primary            -> both, and byte-identical apart from
+ *                                     page.css adding justify-content:center
+ *
+ * .btn-outline takes page.css's values (white fill, --card-border), which is
+ * the version that actually renders today: index.html declared a transparent
+ * .btn-outline but never used the class.
+ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  white-space: nowrap;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-primary {
+  background: var(--orange);
+  color: var(--white);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  background: var(--orange-dark);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  background: var(--white);
+  border: 1.5px solid var(--card-border);
+  color: var(--navy);
+}
+
+.btn-outline:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.btn-white {
+  background: var(--white);
+  color: var(--blue);
+}
+
+.btn-white:hover {
+  background: #eef3ff;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.btn-ghost-white {
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  color: var(--white);
+}
+
+.btn-ghost-white:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--white);
+}

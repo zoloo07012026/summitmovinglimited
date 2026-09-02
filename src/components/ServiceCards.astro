@@ -1,0 +1,212 @@
+---
+import { getCollection } from 'astro:content';
+import Icon from './Icon.astro';
+import { homePage } from '../lib/pages';
+
+/**
+ * The three highlighted services on the home page.
+ *
+ * These are the same collection entries as /services/, not a second copy of
+ * the wording: the card shows shortTitle where the services page shows title,
+ * which is how "Local Moving" and "Local Residential Moving" used to end up
+ * as two independently editable strings.
+ */
+const featured = (await getCollection('services'))
+  .filter((s) => s.data.featuredOnHome)
+  .sort((a, b) => (a.data.homeOrder ?? a.data.order) - (b.data.homeOrder ?? b.data.order));
+
+const { servicesHead: head, servicesLinkLabel } = homePage;
+---
+
+<section class="section services-section" id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">{head.eyebrow}</div>
+      <h2>{head.heading}</h2>
+      {head.text && <p>{head.text}</p>}
+    </div>
+
+    <div class="services-grid">
+      {
+        featured.map((service) => (
+          <div class="service-card">
+            <div class="service-head">
+              <div class="service-img">{service.data.icon && <Icon name={service.data.icon} />}</div>
+              <h3>{service.data.shortTitle ?? service.data.title}</h3>
+            </div>
+            <p>{service.data.homeSummary ?? service.data.summary}</p>
+            <ul class="service-list">
+              {service.data.homeFeatures.map((feature) => (
+                <li>
+                  <Icon name="check-circle" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <a href={`/services/#${service.id}`} class="learn-more">
+              {servicesLinkLabel}
+              <Icon name="arrow" />
+            </a>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .services-section {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(239, 245, 255, 0.78));
+  }
+  .services-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(248, 251, 255, 0.99),
+        rgba(248, 251, 255, 0.94),
+        rgba(248, 251, 255, 0.98)
+      ),
+      var(--image-services);
+    background-size: cover;
+    background-position: center;
+    opacity: 0.18;
+    pointer-events: none;
+  }
+  .services-section .wrap {
+    position: relative;
+    z-index: 1;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  .service-card {
+    position: relative;
+    overflow: hidden;
+    background: var(--card-bg);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 22px;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto;
+    height: 3px;
+    background: linear-gradient(90deg, var(--blue), var(--blue-light));
+    opacity: 0.85;
+  }
+  .service-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+    border-color: #d3dded;
+  }
+  .service-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .service-img {
+    width: 58px;
+    height: 58px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: var(--blue-pale);
+    /* The icons used to hardcode #1e5fd9; --blue is the same colour, and
+       currentColor lets the one shape serve the how-it-works cards too. */
+    color: var(--blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  /* :global because <Icon> is a separate component and its <svg> never carries
+     this component's scope attribute; the parent selector keeps it confined. */
+  .service-img :global(svg) {
+    width: 34px;
+    height: 34px;
+  }
+  .service-card h3 {
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.005em;
+  }
+  .service-card > p {
+    color: var(--grey-700);
+    font-size: 14.5px;
+    margin-bottom: 16px;
+    line-height: 1.55;
+  }
+  .service-list {
+    margin-bottom: 18px;
+    padding-top: 2px;
+  }
+  .service-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--navy);
+    font-weight: 600;
+    margin-bottom: 9px;
+  }
+  .service-list :global(svg) {
+    width: 16px;
+    height: 16px;
+    color: var(--blue);
+    flex-shrink: 0;
+  }
+  .learn-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    width: max-content;
+    padding-top: 12px;
+    border-top: 1px solid var(--grey-200);
+    font-weight: 800;
+    color: var(--orange);
+    font-size: 14px;
+    margin-top: auto;
+  }
+  .learn-more :global(svg) {
+    width: 15px;
+    height: 15px;
+    transition: transform 0.15s ease;
+  }
+  .learn-more:hover :global(svg) {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 1080px) {
+    .services-grid {
+      grid-template-columns: 1fr;
+    }
+    .service-card {
+      padding: 22px;
+    }
+  }
+  @media (max-width: 640px) {
+    .service-head {
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .service-img {
+      width: 52px;
+      height: 52px;
+    }
+  }
+</style>

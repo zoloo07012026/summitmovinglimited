@@ -1,0 +1,174 @@
+---
+import Icon from './Icon.astro';
+import TrustBar from './TrustBar.astro';
+import QuoteForm from './QuoteForm.astro';
+import { homePage } from '../lib/pages';
+
+/**
+ * The hero: copy and trust bar on the left, quote form on the right.
+ *
+ * index.html also carried a .hero-truck block with its own styles. Nothing
+ * ever rendered it, so it is not reproduced here.
+ */
+const { hero, trust } = homePage;
+---
+
+<section class="hero wrap">
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow">{hero.eyebrow}</div>
+      <h1>{hero.headingLead}<br /><span class="accent">{hero.headingAccent}</span></h1>
+      <p class="hero-sub">{hero.sub}</p>
+      <div class="hero-actions">
+        <a href="#quote" class="btn btn-primary">
+          {hero.ctaLabel}
+          <Icon name="arrow" />
+        </a>
+      </div>
+
+      <TrustBar items={trust} />
+    </div>
+
+    <QuoteForm />
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding: 14px 28px 0;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.86) 0%,
+        rgba(255, 255, 255, 0.72) 42%,
+        rgba(255, 255, 255, 0.34) 72%,
+        rgba(234, 241, 255, 0.28) 100%
+      ),
+      var(--image-hero);
+    background-size: cover;
+    background-position: center right;
+    opacity: 0.92;
+    z-index: -1;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(420px, 0.92fr);
+    gap: 44px;
+    align-items: start;
+    padding: 20px 0 30px;
+  }
+  .hero .eyebrow {
+    color: var(--orange);
+  }
+  .hero h1 {
+    font-size: clamp(38px, 4vw, 54px);
+    line-height: 1.08;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--navy);
+  }
+  .hero h1 .accent {
+    color: var(--blue);
+  }
+  .hero-sub {
+    margin-top: 14px;
+    font-size: 17px;
+    color: var(--grey-700);
+    max-width: 560px;
+  }
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  /* The hero opts out of .wrap's max-width on wide screens so the quote card
+     keeps its width instead of the copy column collapsing around it. */
+  @media (min-width: 1200px) and (max-width: 1439px) {
+    .hero.wrap {
+      max-width: none;
+      width: 100%;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    .hero-grid {
+      grid-template-columns: minmax(510px, 1fr) minmax(500px, 0.96fr);
+      gap: 36px;
+      padding-top: 24px;
+      padding-bottom: 34px;
+    }
+    .hero h1 {
+      font-size: clamp(50px, 4.2vw, 60px);
+    }
+    .hero-sub {
+      max-width: 660px;
+    }
+  }
+
+  @media (min-width: 1440px) {
+    .hero.wrap {
+      max-width: 1520px;
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+    .hero-grid {
+      grid-template-columns: minmax(560px, 0.95fr) minmax(560px, 0.9fr);
+      gap: 58px;
+      padding-top: 28px;
+      padding-bottom: 42px;
+    }
+    .hero h1 {
+      font-size: clamp(54px, 4.1vw, 68px);
+    }
+    .hero-sub {
+      max-width: 680px;
+      font-size: 18px;
+    }
+  }
+
+  @media (min-width: 1700px) {
+    .hero.wrap {
+      max-width: 1640px;
+    }
+    .hero-grid {
+      grid-template-columns: minmax(620px, 0.98fr) minmax(620px, 0.9fr);
+      gap: 70px;
+    }
+  }
+
+  @media (max-width: 1080px) {
+    .hero {
+      padding-top: 36px;
+    }
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding: 12px 0 28px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero {
+      padding: 28px 20px 0;
+    }
+    .hero-grid {
+      padding: 8px 0 24px;
+    }
+    .hero h1 {
+      font-size: clamp(34px, 10vw, 44px);
+    }
+    .hero-sub {
+      font-size: 16px;
+    }
+  }
+</style>

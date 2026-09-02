@@ -1,0 +1,171 @@
+---
+import Icon from './Icon.astro';
+import { stat } from '../lib/site';
+import { homePage } from '../lib/pages';
+
+/**
+ * The dark "why choose us" panel and its four figures.
+ *
+ * All four figures are blank and render as em-dashes. That is the standing
+ * rule for this site: a number nobody can verify is left empty rather than
+ * invented. Fill them in src/data/pages/home.json once there are real ones.
+ */
+const { why } = homePage;
+---
+
+<section class="section" id="about">
+  <div class="why-section wrap">
+    <div>
+      <div class="eyebrow">{why.eyebrow}</div>
+      <h2>
+        {
+          why.headingLines.map((line, i) => (
+            <>
+              {i > 0 && <br />}
+              {line}
+            </>
+          ))
+        }
+      </h2>
+      <p class="lead">{why.lead}</p>
+      <ul class="why-points">
+        {
+          why.points.map((point) => (
+            <li>
+              <span class="ic">
+                <Icon name={point.icon} />
+              </span>
+              <div>
+                <h5>{point.heading}</h5>
+                <p>{point.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="stat-grid">
+      {
+        why.stats.map((s) => (
+          <div class="stat-card">
+            <div class="num">{stat(s.value)}</div>
+            <div class="lbl">{s.label}</div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .why-section {
+    background:
+      linear-gradient(135deg, rgba(12, 27, 58, 0.98), rgba(12, 27, 58, 0.88)), var(--image-why);
+    background-size: cover;
+    background-position: center;
+    color: var(--white);
+    border-radius: 16px;
+    margin: 0 auto;
+    padding: 58px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 44px;
+    align-items: center;
+  }
+  .why-section .eyebrow {
+    color: #8fb3ff;
+  }
+  .why-section h2 {
+    font-size: clamp(28px, 3.4vw, 38px);
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: -0.01em;
+    margin-bottom: 18px;
+  }
+  .why-section p.lead {
+    color: #c7d3ef;
+    font-size: 16.5px;
+    margin-bottom: 8px;
+  }
+  .why-points {
+    margin-top: 24px;
+  }
+  .why-points li {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 18px;
+    align-items: flex-start;
+  }
+  .why-points .ic {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: rgba(59, 123, 245, 0.18);
+    color: #6ea0ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  /* :global because <Icon> is a separate component and its <svg> never carries
+     this component's scope attribute; the parent selector keeps it confined. */
+  .why-points .ic :global(svg) {
+    width: 16px;
+    height: 16px;
+  }
+  .why-points h5 {
+    font-size: 15.5px;
+    font-weight: 700;
+    margin-bottom: 3px;
+  }
+  .why-points p {
+    font-size: 14px;
+    color: #aebbdd;
+    line-height: 1.5;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .stat-card {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    padding: 24px 20px;
+  }
+  .stat-card .num {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.02em;
+  }
+  .stat-card .lbl {
+    font-size: 13.5px;
+    color: #aebbdd;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  #about {
+    padding-bottom: 18px;
+  }
+
+  @media (max-width: 1080px) {
+    .why-section {
+      grid-template-columns: 1fr;
+      padding: 44px 32px;
+      border-radius: 14px;
+    }
+  }
+  @media (max-width: 640px) {
+    .why-section {
+      padding: 36px 22px;
+    }
+    #about {
+      padding-bottom: 12px;
+    }
+  }
+</style>

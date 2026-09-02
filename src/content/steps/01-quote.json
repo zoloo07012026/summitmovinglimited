@@ -1,0 +1,10 @@
+{
+  "order": 1,
+  "title": "Get Your Free Quote",
+  "description": "Tell us about your move and get an instant, no-obligation estimate.",
+  "guideTitle": "Get your quote",
+  "guideDescription": "Tell us your route, date, home size, and service needs.",
+  "image": "../../assets/steps/step-01.jpg",
+  "imageAlt": "Quote planning paperwork on a desk",
+  "icon": "check-square"
+}

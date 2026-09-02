@@ -1,0 +1,90 @@
+---
+import Icon from './Icon.astro';
+import { site, stat } from '../lib/site';
+import { blogPage } from '../lib/pages';
+import type { Post } from '../lib/blog';
+
+/**
+ * The blog sidebar, shared by /blog/ and every post page.
+ *
+ * Category counts are computed from the posts that actually exist. The old
+ * page hardcoded 19 / 6 / 4 / 16 / 3 against ten posts, none of which had a
+ * body. A category with nothing in it is dropped, and if that empties the
+ * whole card the card goes too -- an accurate zero, not a fabricated number.
+ */
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+const s = blogPage.sidebar;
+
+const categories = site.blogCategories
+  .map((name) => ({ name, count: posts.filter((p) => p.data.category === name).length }))
+  .filter((c) => c.count > 0);
+---
+
+<aside class="blog-sidebar" aria-label="Blog sidebar">
+  <div class="side-card">
+    <h3>{s.searchHeading}</h3>
+    <div class="search-box">
+      <Icon name="search" />
+      <span>{s.searchPlaceholder}</span>
+    </div>
+  </div>
+
+  {
+    site.serviceAreas.length > 0 && (
+      <div class="side-card accent">
+        <h3>
+          <Icon name="map-pin" />
+          {s.areasHeading}
+        </h3>
+        <ul class="side-list">
+          {site.serviceAreas.map((area) => (
+            <li>{area}</li>
+          ))}
+        </ul>
+        <a class="side-link" href={s.areasLinkHref}>
+          {s.areasLinkLabel}
+        </a>
+      </div>
+    )
+  }
+
+  <div class="side-card rating">
+    <h3>{s.ratingHeading}</h3>
+    <strong>{stat(site.rating.value)}</strong>
+    <span>{s.ratingLabel}</span>
+  </div>
+
+  {
+    site.popularServices.length > 0 && (
+      <div class="side-card">
+        <h3>
+          <Icon name="diamond" />
+          {s.popularHeading}
+        </h3>
+        <ul class="side-list">
+          {site.popularServices.map((name) => (
+            <li>{name}</li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+
+  {
+    categories.length > 0 && (
+      <div class="side-card">
+        <h3>{s.categoriesHeading}</h3>
+        {categories.map((c) => (
+          <div class="category-row">
+            <span>{c.name}</span>
+            <b>{c.count}</b>
+          </div>
+        ))}
+      </div>
+    )
+  }
+</aside>

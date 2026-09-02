@@ -1,0 +1,33 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import type { NavKey } from '../lib/nav';
+
+import '../styles/interior.css';
+
+/**
+ * Layout for every page except the home page.
+ *
+ * The `is-interior` class on <main> is what activates the interior values of
+ * the handful of rules that differ from the home page (.section padding,
+ * .eyebrow, .cta-band and friends). Without it those elements fall back to the
+ * home page's styling, so it is not decorative -- see interior.css.
+ */
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  noindex?: boolean;
+  active?: NavKey;
+  /** Extra class on <main>, e.g. "services-page" or "blog-page". */
+  mainClass?: string;
+}
+
+const { mainClass, ...rest } = Astro.props;
+---
+
+<BaseLayout {...rest}>
+  <slot name="head" slot="head" />
+  <main class:list={['is-interior', mainClass]}>
+    <slot />
+  </main>
+</BaseLayout>

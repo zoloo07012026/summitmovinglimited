@@ -1,0 +1,751 @@
+---
+import Icon from './Icon.astro';
+import { forms } from '../lib/pages';
+import { site } from '../lib/site';
+
+/**
+ * The three-step quote form.
+ *
+ * Ported from index.html's inline script with four deliberate changes:
+ *
+ *  1. Configuration comes from src/data/forms.json instead of being hardcoded.
+ *     The Formspree endpoint and the phone number in the error message were
+ *     both literals in the old script, so changing either meant a code edit.
+ *  2. The review rows are built with createElement/textContent. The old code
+ *     interpolated the customer's own input into innerHTML, which is not just
+ *     self-XSS -- typing "Elm & Oak" into Move From broke the review today.
+ *  3. The success panel and the error line are pre-rendered and hidden rather
+ *     than injected as HTML strings, so their styling lives in this file.
+ *  4. A Formspree _gotcha honeypot.
+ *
+ * Two things below are load-bearing and must not be "tidied":
+ *  - setStep disables the fields of inactive steps. Hiding them instead makes
+ *    the browser validate required fields the customer cannot see, and Next
+ *    Step then does nothing with no visible error.
+ *  - the step indicator uses `i <= currentStep`, so completed steps stay lit.
+ *    Changing it to `===` is not a simplification, it is a different design.
+ */
+const f = forms;
+
+const config = {
+  endpoint: f.endpoint,
+  subject: f.subject,
+  nextLabel: f.nextLabel,
+  submitLabel: f.submitLabel,
+  sendingLabel: f.sendingLabel,
+  notProvided: f.notProvided,
+  noneSelected: f.noneSelected,
+  routeJoiner: f.routeJoiner,
+  reviewLabels: f.reviewLabels,
+};
+
+/* One data attribute rather than a dozen: the review labels are a map, and
+   flattening a map into separate attributes is how they drift apart. Astro
+   escapes attribute values, so the quotes inside the JSON are safe. */
+const configJson = JSON.stringify(config);
+
+const errorText = f.errorText.replace('{phone}', site.phone);
+---
+
+<div class="quote-card" id="quote" data-quote-card data-config={configJson}>
+  <h2>{f.heading}</h2>
+  <p class="quote-sub">{f.sub}</p>
+
+  <div class="steps">
+    {
+      f.stepLabels.map((label, i) => (
+        <>
+          {i > 0 && <div class="step-line" />}
+          <div class:list={['step', { active: i === 0 }]}>
+            <span class="step-circle">{i + 1}</span>
+            <span class="label">{label}</span>
+          </div>
+        </>
+      ))
+    }
+  </div>
+
+  <form id="quoteForm">
+    <input
+      class="gotcha"
+      type="text"
+      name="_gotcha"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+    />
+
+    <div class="form-step active">
+      <div class="field">
+        <label for="moveType">{f.fields.moveType.label}</label>
+        <select id="moveType" required>
+          <option value="" selected disabled>{f.fields.moveType.placeholder}</option>
+          {f.moveTypes.map((type) => <option>{type}</option>)}
+        </select>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="moveFrom">{f.fields.moveFrom.label}</label>
+          <input id="moveFrom" type="text" placeholder={f.fields.moveFrom.placeholder} required />
+        </div>
+        <div class="field">
+          <label for="moveTo">{f.fields.moveTo.label}</label>
+          <input id="moveTo" type="text" placeholder={f.fields.moveTo.placeholder} required />
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="moveDate">{f.fields.moveDate.label}</label>
+          <div class="field-icon-wrap">
+            <input
+              id="moveDate"
+              type="text"
+              placeholder={f.fields.moveDate.placeholder}
+              required
+            />
+            <Icon name="calendar" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="homeSize">{f.fields.homeSize.label}</label>
+          <select id="homeSize" required>
+            <option value="" selected disabled>{f.fields.homeSize.placeholder}</option>
+            {f.homeSizes.map((size) => <option>{size}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>{f.fields.services.label}</label>
+        <div class="checks">
+          {
+            f.additionalServices.map((service) => (
+              <label class="check-item">
+                <input type="checkbox" name="services" value={service} />
+                <span>{service}</span>
+              </label>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="form-step">
+      <div class="field-row">
+        <div class="field">
+          <label for="firstName">{f.fields.firstName.label}</label>
+          <input
+            id="firstName"
+            type="text"
+            placeholder={f.fields.firstName.placeholder}
+            required
+            disabled
+          />
+        </div>
+        <div class="field">
+          <label for="lastName">{f.fields.lastName.label}</label>
+          <input
+            id="lastName"
+            type="text"
+            placeholder={f.fields.lastName.placeholder}
+            required
+            disabled
+          />
+        </div>
+      </div>
+      <div class="field">
+        <label for="email">{f.fields.email.label}</label>
+        <input id="email" type="email" placeholder={f.fields.email.placeholder} required disabled />
+      </div>
+      <div class="field">
+        <label for="phone">{f.fields.phone.label}</label>
+        <input id="phone" type="tel" placeholder={f.fields.phone.placeholder} required disabled />
+      </div>
+      <div class="field">
+        <label for="notes">{f.fields.notes.label}</label>
+        <input id="notes" type="text" placeholder={f.fields.notes.placeholder} disabled />
+      </div>
+    </div>
+
+    <div class="form-step">
+      <div class="review-box" data-quote-review></div>
+    </div>
+
+    <p class="quote-error-message" hidden data-quote-error>{errorText}</p>
+
+    <div class="quote-actions">
+      <button type="button" class="quote-back" data-quote-back aria-label="Previous step">
+        <Icon name="arrow-left" />
+      </button>
+      <button type="submit" class="quote-submit" data-quote-submit>
+        <span data-submit-label>{f.nextLabel}</span>
+        <Icon name="arrow" />
+      </button>
+    </div>
+  </form>
+
+  <div class="quote-success" hidden data-quote-success>
+    <div class="quote-success-icon"><Icon name="check" /></div>
+    <h3>{f.successHeading}</h3>
+    <p>{f.successText}</p>
+  </div>
+
+  <div class="secure-note">
+    <Icon name="lock" />
+    {f.secureNote}
+  </div>
+</div>
+
+<script>
+  const card = document.querySelector<HTMLElement>('[data-quote-card]');
+
+  if (card) {
+    const form = card.querySelector('form');
+    const review = card.querySelector<HTMLElement>('[data-quote-review]');
+    const back = card.querySelector<HTMLElement>('[data-quote-back]');
+    const submit = card.querySelector<HTMLButtonElement>('[data-quote-submit]');
+    const submitLabel = card.querySelector<HTMLElement>('[data-submit-label]');
+    const success = card.querySelector<HTMLElement>('[data-quote-success]');
+    const errorMessage = card.querySelector<HTMLElement>('[data-quote-error]');
+
+    if (form && review && back && submit && submitLabel && success && errorMessage) {
+      const config = JSON.parse(card.dataset.config || '{}');
+      const stepIndicators = card.querySelectorAll('.step');
+      const formSteps = form.querySelectorAll<HTMLElement>('.form-step');
+      let currentStep = 0;
+
+      const value = (id: string) => {
+        const field = card.querySelector<HTMLInputElement | HTMLSelectElement>(`#${id}`);
+        return field && field.value ? field.value : config.notProvided;
+      };
+
+      const chosenServices = () => {
+        const picked = [
+          ...form.querySelectorAll<HTMLInputElement>('input[name="services"]:checked'),
+        ].map((input) => input.value);
+        return picked.length ? picked.join(', ') : config.noneSelected;
+      };
+
+      /* Built as nodes, not markup: these strings are whatever the customer
+         typed. "Elm & Oak" used to arrive here as "Elm &amp; Oak". */
+      function reviewRow(label: string, ...lines: string[]) {
+        const row = document.createElement('div');
+        row.className = 'review-row';
+
+        const key = document.createElement('span');
+        key.textContent = label;
+
+        const val = document.createElement('strong');
+        lines.forEach((line, i) => {
+          if (i > 0) val.appendChild(document.createElement('br'));
+          val.appendChild(document.createTextNode(line));
+        });
+
+        row.append(key, val);
+        return row;
+      }
+
+      function updateReview() {
+        const l = config.reviewLabels;
+        review!.replaceChildren(
+          reviewRow(l.moveType, value('moveType')),
+          reviewRow(l.route, `${value('moveFrom')}${config.routeJoiner}${value('moveTo')}`),
+          reviewRow(l.moveDate, value('moveDate')),
+          reviewRow(l.homeSize, value('homeSize')),
+          reviewRow(l.services, chosenServices()),
+          reviewRow(l.name, `${value('firstName')} ${value('lastName')}`),
+          reviewRow(l.contact, value('email'), value('phone')),
+          reviewRow(l.notes, value('notes'))
+        );
+      }
+
+      function setStep(next: number) {
+        currentStep = next;
+        // Cumulative on purpose: completed steps stay lit.
+        stepIndicators.forEach((step, i) => step.classList.toggle('active', i <= currentStep));
+
+        formSteps.forEach((step, i) => {
+          const isActive = i === currentStep;
+          step.classList.toggle('active', isActive);
+          // Disabled, not hidden. A hidden-but-enabled required field makes the
+          // browser refuse to submit with no visible message.
+          step
+            .querySelectorAll<HTMLInputElement | HTMLSelectElement>('input, select')
+            .forEach((field) => {
+              field.disabled = !isActive;
+            });
+        });
+
+        back!.classList.toggle('visible', currentStep > 0);
+        const isLast = currentStep === formSteps.length - 1;
+        submitLabel!.textContent = isLast ? config.submitLabel : config.nextLabel;
+        if (isLast) updateReview();
+      }
+
+      function validateCurrentStep() {
+        const fields = [
+          ...formSteps[currentStep].querySelectorAll<HTMLInputElement | HTMLSelectElement>(
+            'input, select'
+          ),
+        ];
+        for (const field of fields) {
+          if (!field.checkValidity()) {
+            field.reportValidity();
+            return false;
+          }
+        }
+        return true;
+      }
+
+      function buildPayload() {
+        const payload = new FormData();
+        const gotcha = form!.querySelector<HTMLInputElement>('input[name="_gotcha"]');
+        payload.append('_subject', config.subject);
+        payload.append('_gotcha', gotcha ? gotcha.value : '');
+        payload.append('Move Type', value('moveType'));
+        payload.append('Move From', value('moveFrom'));
+        payload.append('Move To', value('moveTo'));
+        payload.append('Move Date', value('moveDate'));
+        payload.append('Home Size', value('homeSize'));
+        payload.append('Additional Services', chosenServices());
+        payload.append('First Name', value('firstName'));
+        payload.append('Last Name', value('lastName'));
+        payload.append('Name', `${value('firstName')} ${value('lastName')}`.trim());
+        payload.append('Email', value('email'));
+        payload.append('Phone', value('phone'));
+        payload.append('Move Notes', value('notes'));
+        return payload;
+      }
+
+      back.addEventListener('click', () => {
+        if (currentStep > 0) setStep(currentStep - 1);
+      });
+
+      /* Was an inline onfocus attribute. The blur half is new: without it the
+         field keeps showing a date picker's empty "mm/dd/yyyy" instead of the
+         placeholder once the customer clicks away. */
+      const dateField = card.querySelector<HTMLInputElement>('#moveDate');
+      if (dateField) {
+        dateField.addEventListener('focus', () => {
+          dateField.type = 'date';
+        });
+        dateField.addEventListener('blur', () => {
+          if (!dateField.value) dateField.type = 'text';
+        });
+      }
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (!validateCurrentStep()) return;
+
+        if (currentStep < formSteps.length - 1) {
+          setStep(currentStep + 1);
+          return;
+        }
+
+        errorMessage.hidden = true;
+        submit.disabled = true;
+        submitLabel.textContent = config.sendingLabel;
+
+        try {
+          const response = await fetch(config.endpoint, {
+            method: 'POST',
+            body: buildPayload(),
+            headers: { Accept: 'application/json' },
+          });
+          if (!response.ok) throw new Error('Formspree submission failed');
+
+          stepIndicators.forEach((step) => step.classList.add('active'));
+          form.hidden = true;
+          success.hidden = false;
+        } catch {
+          submit.disabled = false;
+          submitLabel.textContent = config.submitLabel;
+          errorMessage.hidden = false;
+        }
+      });
+
+      setStep(0);
+    }
+  }
+</script>
+
+<style>
+  .quote-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--card-border);
+    padding: 18px 22px 20px;
+    position: sticky;
+    /* Was a hardcoded 124px; now derived so it tracks the header height. */
+    top: calc(var(--header-h) + var(--header-gap));
+    width: 100%;
+    max-width: 560px;
+    justify-self: end;
+  }
+  .quote-card h2 {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .quote-card .quote-sub {
+    color: var(--grey-500);
+    font-size: 13.5px;
+    margin-top: 2px;
+    margin-bottom: 14px;
+  }
+
+  .steps {
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .step-circle {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1.5px solid var(--grey-200);
+    color: var(--grey-500);
+    background: var(--white);
+    flex-shrink: 0;
+  }
+  .step.active .step-circle {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--white);
+  }
+  .step span.label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--grey-500);
+    white-space: nowrap;
+  }
+  .step.active span.label {
+    color: var(--navy);
+  }
+  .step-line {
+    flex: 1;
+    height: 1.5px;
+    background: var(--grey-200);
+    margin: 0 10px;
+  }
+
+  .field {
+    margin-bottom: 10px;
+  }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 5px;
+  }
+  .field select,
+  .field input {
+    width: 100%;
+    padding: 9px 14px;
+    border: 1.5px solid var(--grey-200);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--navy);
+    background: var(--white);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    appearance: none;
+  }
+  .field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%2364748b' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+  .field input::placeholder {
+    color: #94a3b8;
+  }
+  .field select:focus,
+  .field input:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(30, 95, 217, 0.12);
+  }
+  .field-icon-wrap {
+    position: relative;
+  }
+  /* :global throughout this block because every <svg> here comes from <Icon>,
+     a separate component, and so never carries this component's scope
+     attribute. The parent selectors keep each rule confined. */
+  .field-icon-wrap :global(svg) {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--grey-500);
+    pointer-events: none;
+  }
+
+  .checks {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+  .check-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13.5px;
+    color: var(--navy);
+    font-weight: 700;
+    white-space: nowrap;
+    padding: 8px 10px;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    background: #fbfdff;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .check-item input {
+    width: 0;
+    height: 0;
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    accent-color: var(--blue);
+    margin: 0;
+    cursor: pointer;
+  }
+  .check-item span::before {
+    content: '';
+    display: inline-flex;
+    width: 15px;
+    height: 15px;
+    margin-right: 7px;
+    border: 1.5px solid #a9b8ce;
+    border-radius: 5px;
+    vertical-align: -2px;
+    background: #fff;
+    transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .check-item:has(input:checked) {
+    background: var(--blue-pale);
+    border-color: #9db8f6;
+    color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(30, 95, 217, 0.08);
+  }
+  .check-item:has(input:checked) span::before {
+    background: var(--blue);
+    border-color: var(--blue);
+    box-shadow: inset 0 0 0 3px #fff;
+  }
+  .check-item:focus-within {
+    box-shadow: 0 0 0 3px rgba(30, 95, 217, 0.14);
+    border-color: #9db8f6;
+  }
+
+  /* Formspree's honeypot: a field only a bot fills in. */
+  .gotcha {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .form-step {
+    display: none;
+  }
+  .form-step.active {
+    display: block;
+  }
+  .quote-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 2px;
+  }
+  .quote-back {
+    display: none;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    border: 1.5px solid var(--grey-200);
+    color: var(--navy);
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  }
+  .quote-back.visible {
+    display: flex;
+  }
+  .quote-back:hover {
+    border-color: var(--blue);
+    color: var(--blue);
+    background: var(--blue-pale);
+  }
+  .quote-back :global(svg) {
+    width: 18px;
+    height: 18px;
+  }
+  .review-box {
+    border: 1px solid var(--grey-200);
+    border-radius: 10px;
+    padding: 12px;
+    background: #fbfdff;
+    margin-bottom: 10px;
+  }
+  .review-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--grey-200);
+    font-size: 13.5px;
+  }
+  .review-row:last-child {
+    border-bottom: none;
+  }
+  .review-row span {
+    color: var(--grey-500);
+    font-weight: 600;
+  }
+  .review-row strong {
+    font-weight: 700;
+    text-align: right;
+  }
+
+  .quote-submit {
+    width: 100%;
+    background: var(--orange);
+    color: var(--white);
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 0;
+    box-shadow: var(--shadow-sm);
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+  }
+  .quote-submit:hover {
+    background: var(--orange-dark);
+    box-shadow: var(--shadow-md);
+  }
+  .quote-submit :global(svg) {
+    width: 18px;
+    height: 18px;
+  }
+  .secure-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: var(--grey-500);
+  }
+  .secure-note :global(svg) {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Was an inline style attribute on an injected HTML string. */
+  .quote-error-message {
+    margin: 0 0 10px;
+    color: #b42318;
+    font-size: 13.5px;
+    text-align: center;
+  }
+  .quote-success {
+    text-align: center;
+    padding: 24px 0;
+  }
+  .quote-success-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--blue-pale);
+    color: var(--blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+  }
+  .quote-success-icon :global(svg) {
+    width: 28px;
+    height: 28px;
+  }
+  .quote-success h3 {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+  .quote-success p {
+    font-size: 14.5px;
+    color: var(--grey-500);
+  }
+
+  @media (min-width: 1200px) and (max-width: 1439px) {
+    .quote-card {
+      max-width: 600px;
+    }
+  }
+  @media (min-width: 1440px) {
+    .quote-card {
+      max-width: 640px;
+      padding: 22px 26px 24px;
+    }
+    .quote-card h2 {
+      font-size: 22px;
+    }
+    .quote-card .quote-sub {
+      font-size: 14.5px;
+      margin-bottom: 16px;
+    }
+  }
+  @media (max-width: 1080px) {
+    .quote-card {
+      position: static;
+      margin-top: 0;
+      max-width: none;
+      justify-self: stretch;
+    }
+  }
+  @media (max-width: 640px) {
+    .field-row {
+      grid-template-columns: 1fr;
+    }
+    .checks {
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+  }
+</style>

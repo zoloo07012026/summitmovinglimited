@@ -1,0 +1,58 @@
+---
+import { site } from '../lib/site';
+
+/**
+ * Everything the old pages were missing. All seven <head> blocks carried only a
+ * charset, a viewport and a <title> -- no description, canonical, Open Graph,
+ * Twitter card, favicon or robots directive anywhere on the site.
+ *
+ * `description` is required rather than optional on purpose: a page cannot ship
+ * without one.
+ */
+interface Props {
+  title: string;
+  description: string;
+  /** Replaces the "<title> | Summit Moving Limited" suffix, for the home page. */
+  titleOverride?: string;
+  ogImage?: string;
+  noindex?: boolean;
+}
+
+const { title, description, titleOverride, ogImage, noindex = false } = Astro.props;
+
+const fullTitle = titleOverride ?? `${title} | ${site.businessName}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+/* Every page gets a card image. /og.png is the branded default; a page passes
+   its own only when it has something better to show. */
+const ogImageUrl = new URL(ogImage ?? '/og.png', Astro.site).href;
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="generator" content={Astro.generator} />
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical.href} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={site.businessName} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical.href} />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content={ogImageUrl} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+
+<meta name="theme-color" content="#0c1b3a" />
+{/* Generated from the logo, padded to a square. The site had no favicon at all. */}
+<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+<link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />

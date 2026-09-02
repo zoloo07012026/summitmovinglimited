@@ -1,0 +1,63 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import FeaturedPost from '../../components/FeaturedPost.astro';
+import PostCard from '../../components/PostCard.astro';
+import BlogSidebar from '../../components/BlogSidebar.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { blogPage } from '../../lib/pages';
+import { publishedPosts } from '../../lib/blog';
+
+const posts = await publishedPosts();
+const featured = posts.find((p) => p.data.featured) ?? posts[0];
+const rest = posts.filter((p) => p !== featured);
+---
+
+<PageLayout
+  title={blogPage.seo.title}
+  description={blogPage.seo.description}
+  active="blog"
+  mainClass="blog-page"
+>
+  <JsonLd slot="head" title={blogPage.seo.title} />
+
+  <section class="section">
+    <div class="wrap blog-shell">
+      <div class="blog-main">
+        <div class="blog-heading">
+          <div>
+            {/* "Featured Post" would be labelling nothing while the list is empty. */}
+            {featured && <div class="eyebrow">{blogPage.heading.eyebrow}</div>}
+            <h1>{blogPage.heading.title}</h1>
+          </div>
+          <p>{blogPage.heading.text}</p>
+        </div>
+
+        {
+          featured ? (
+            <FeaturedPost post={featured} />
+          ) : (
+            <div class="blog-empty">
+              <h2>{blogPage.empty.heading}</h2>
+              <p>{blogPage.empty.text}</p>
+              <a class="btn btn-outline" href={blogPage.empty.href}>
+                {blogPage.empty.label}
+              </a>
+            </div>
+          )
+        }
+
+        {
+          rest.length > 0 && (
+            <div class="post-grid">
+              {rest.map((post) => (
+                <PostCard post={post} />
+              ))}
+            </div>
+          )
+        }
+      </div>
+
+      <BlogSidebar posts={posts} />
+    </div>
+  </section>
+</PageLayout>

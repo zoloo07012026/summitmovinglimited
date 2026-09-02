@@ -1,0 +1,71 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '../layouts/PageLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import ServiceTiles from '../components/ServiceTiles.astro';
+import CtaBand from '../components/CtaBand.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { servicesPage } from '../lib/pages';
+import { servicesListNode } from '../lib/seo';
+
+const all = await getCollection('services');
+const byOrder = (a: (typeof all)[number], b: (typeof all)[number]) =>
+  a.data.order - b.data.order;
+
+const core = all.filter((s) => s.data.group === 'core').sort(byOrder);
+const support = all.filter((s) => s.data.group === 'support').sort(byOrder);
+
+// The panel used to read a hardcoded "10 services". Counting the collection
+// means adding a service can never leave the headline lying.
+const headline = `${all.length} services`;
+
+const schemaServices = [...core, ...support].map((s) => ({
+  id: s.id,
+  title: s.data.title,
+  summary: s.data.summary,
+  tag: s.data.tag,
+}));
+---
+
+<PageLayout
+  title={servicesPage.seo.title}
+  description={servicesPage.seo.description}
+  active="services"
+  mainClass="services-page"
+>
+  <JsonLd
+    slot="head"
+    title={servicesPage.seo.title}
+    nodes={(base, url) => [servicesListNode(base, url, schemaServices)]}
+  />
+
+  <PageHero
+    hero={servicesPage.hero}
+    panel={servicesPage.panel}
+    strong={headline}
+    jumpLinks={servicesPage.jumpLinks}
+    sectionClass="services-hero"
+    panelClass="service-hero-card"
+  />
+
+  <ServiceTiles
+    id="core-services"
+    head={servicesPage.coreHead}
+    services={core}
+    gridClass="core-service-grid"
+  />
+
+  <ServiceTiles
+    id="support-services"
+    head={servicesPage.supportHead}
+    services={support}
+    gridClass="support-grid"
+    alt
+  />
+
+  <CtaBand
+    cta={servicesPage.cta}
+    sectionClass="service-cta-section"
+    bandClass="service-cta"
+  />
+</PageLayout>

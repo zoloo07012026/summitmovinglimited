@@ -1,0 +1,68 @@
+---
+import { getCollection, render } from 'astro:content';
+import PageLayout from '../../layouts/PageLayout.astro';
+import BlogSidebar from '../../components/BlogSidebar.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { blogPage } from '../../lib/pages';
+import { blogPostingNode } from '../../lib/seo';
+import { publishedPosts, formatDate, type Post } from '../../lib/blog';
+
+/**
+ * Only published posts get a route. A draft therefore has no page, no sitemap
+ * entry and nothing in dist/ -- there is no hidden URL to stumble onto.
+ */
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const siblings = await publishedPosts();
+---
+
+<PageLayout
+  title={post.data.title}
+  description={post.data.seoDescription ?? post.data.description}
+  active="blog"
+  mainClass="blog-page"
+>
+  <JsonLd
+    slot="head"
+    title={post.data.title}
+    nodes={(base, url) => [blogPostingNode(base, url, post.data)]}
+  />
+
+  <section class="page-hero post-hero">
+    <div class="wrap">
+      <div class="eyebrow">{post.data.category}</div>
+      <h1>{post.data.title}</h1>
+      <div class="post-meta">
+        <span>{formatDate(post.data.pubDate)}</span>
+        {post.data.readingTime && <span>{post.data.readingTime} read</span>}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap blog-shell">
+      <article class="blog-main">
+        {
+          post.data.image && (
+            <img class="post-cover" src={post.data.image} alt={post.data.imageAlt} />
+          )
+        }
+        <div class="post-prose"><Content /></div>
+      </article>
+
+      <BlogSidebar posts={siblings} />
+    </div>
+  </section>
+
+  <CtaBand cta={blogPage.postCta} />
+</PageLayout>
