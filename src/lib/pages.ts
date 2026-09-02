@@ -1,5 +1,7 @@
 import { z } from 'astro/zod';
 
+import { stripNulls } from './nulls';
+
 import rawServices from '../data/pages/services.json';
 import rawFaq from '../data/pages/faq.json';
 import rawGuide from '../data/pages/guide.json';
@@ -22,7 +24,7 @@ import {
  * with the offending field path instead of rendering `undefined` into a heading.
  */
 function parse<S extends z.ZodTypeAny>(schema: S, raw: unknown, file: string): z.infer<S> {
-  const result = schema.safeParse(raw);
+  const result = schema.safeParse(stripNulls(raw));
   if (!result.success) {
     const problems = result.error.issues
       .map((i) => `  ${file} -> ${i.path.join('.') || '(root)'}: ${i.message}`)

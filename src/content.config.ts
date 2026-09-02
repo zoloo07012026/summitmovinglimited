@@ -1,6 +1,14 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { stripNulls } from './lib/nulls';
+
+/**
+ * Wraps a collection schema so a field the CMS cleared arrives as absent
+ * rather than null. See src/lib/nulls.ts for why -- the first CMS save this
+ * site ever took broke the build for exactly this reason.
+ */
+const cms = <T extends z.ZodTypeAny>(schema: T) => z.preprocess(stripNulls, schema);
 
 /**
  * Content collections. Repeating things live here; one-off page copy lives in
@@ -25,7 +33,7 @@ import { z } from 'astro/zod';
  */
 const services = defineCollection({
   loader: glob({ base: './src/content/services', pattern: '*.json' }),
-  schema: z.object({
+  schema: cms(z.object({
     title: z.string(),
     shortTitle: z.string().optional(),
     group: z.enum(['core', 'support']),
@@ -39,18 +47,18 @@ const services = defineCollection({
     icon: z.string().optional(),
     showInFooter: z.boolean().default(false),
     footerOrder: z.number().int().optional(),
-  }),
+  })),
 });
 
 const faq = defineCollection({
   loader: glob({ base: './src/content/faq', pattern: '*.json' }),
-  schema: z.object({
+  schema: cms(z.object({
     question: z.string(),
     answer: z.string(),
     order: z.number().int(),
     /** Reproduces the <details open> on the first question. */
     openByDefault: z.boolean().default(false),
-  }),
+  })),
 });
 
 /**
@@ -61,7 +69,7 @@ const faq = defineCollection({
 const steps = defineCollection({
   loader: glob({ base: './src/content/steps', pattern: '*.json' }),
   schema: ({ image }) =>
-    z.object({
+    cms(z.object({
       order: z.number().int(),
       title: z.string(),
       description: z.string(),
@@ -72,7 +80,7 @@ const steps = defineCollection({
       imageAlt: z.string().default(''),
       /** Key into Icon.astro, shown on the home page card. */
       icon: z.string().optional(),
-    }),
+    })),
 });
 
 /**
@@ -92,7 +100,7 @@ const steps = defineCollection({
  */
 const blog = defineCollection({
   loader: glob({ base: './src/content/blog', pattern: '*.md' }),
-  schema: z.object({
+  schema: cms(z.object({
     title: z.string(),
     description: z.string(),
     /** Falls back to description when blank. */
@@ -107,7 +115,7 @@ const blog = defineCollection({
     /** At most one. The newest wins if several are flagged. */
     featured: z.boolean().default(false),
     draft: z.boolean().default(true),
-  }),
+  })),
 });
 
 /**
@@ -121,7 +129,7 @@ const blog = defineCollection({
  */
 const testimonials = defineCollection({
   loader: glob({ base: './src/content/testimonials', pattern: '*.json' }),
-  schema: z.object({
+  schema: cms(z.object({
     quote: z.string(),
     name: z.string(),
     /** Under the name, e.g. "Local move, Naperville IL". */
@@ -131,17 +139,17 @@ const testimonials = defineCollection({
     /** 1-5. Only ever set it to what the customer actually gave. */
     rating: z.number().int().min(1).max(5).default(5),
     order: z.number().int().default(0),
-  }),
+  })),
 });
 
 const legal = defineCollection({
   loader: glob({ base: './src/content/legal', pattern: '*.md' }),
-  schema: z.object({
+  schema: cms(z.object({
     title: z.string(),
     eyebrow: z.string(),
     lastUpdated: z.coerce.date(),
     seoDescription: z.string(),
-  }),
+  })),
 });
 
 export const collections = { services, faq, steps, blog, testimonials, legal };

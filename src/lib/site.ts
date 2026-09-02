@@ -1,5 +1,6 @@
 import raw from '../data/site.json';
 import { SiteSchema, type Site } from './schema';
+import { stripNulls } from './nulls';
 
 /**
  * The validated business data, imported by the header, footer, JSON-LD builders
@@ -10,7 +11,7 @@ import { SiteSchema, type Site } from './schema';
  * footer.
  */
 function load(): Site {
-  const result = SiteSchema.safeParse(raw);
+  const result = SiteSchema.safeParse(stripNulls(raw));
   if (!result.success) {
     const problems = result.error.issues
       .map((i) => `  src/data/site.json -> ${i.path.join('.') || '(root)'}: ${i.message}`)
