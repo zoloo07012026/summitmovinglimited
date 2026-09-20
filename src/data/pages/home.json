@@ -17,8 +17,16 @@
       "heading": "Licensed & Insured",
       "text": "Your belongings are safe with us"
     },
-    { "icon": "users", "heading": "", "text": "Moves completed" },
-    { "icon": "star", "heading": "", "text": "Customer rating" },
+    {
+      "icon": "users",
+      "heading": "Reliable Moving",
+      "text": "Trained crews and careful handling"
+    },
+    {
+      "icon": "diamond",
+      "heading": "Affordable Service",
+      "text": "Clear pricing, no surprise charges"
+    },
     {
       "icon": "clock",
       "heading": "On-Time Promise",

@@ -146,9 +146,46 @@ const { hero, trust } = homePage;
     }
   }
 
+  /*
+   * Below 1080px the hero stops being a two-column band and becomes a tall
+   * stack, which breaks the desktop background treatment in two ways.
+   *
+   * The photo has the truck and the skyline on its left and open white haze on
+   * its right, so `center right` works on a wide viewport and shows nothing
+   * but haze on a narrow one -- the image was effectively invisible on a
+   * phone. It is anchored left here instead.
+   *
+   * The overlay also has to turn: a 90deg white-to-clear gradient is built for
+   * copy sitting to the left of the photo, and once the copy sits on top of it
+   * the fade has to run top to bottom. It stays heavy where the headline is
+   * and closes to solid white before the trust bar starts.
+   */
   @media (max-width: 1080px) {
     .hero {
       padding-top: 36px;
+    }
+    .hero::before {
+      /* A band behind the headline rather than a full-height backdrop. Cover
+         on a stack this tall crops the photo to an unreadable sliver; at
+         420px the truck and the skyline both fit. */
+      inset: 0 0 auto;
+      height: 420px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.88) 0%,
+          rgba(255, 255, 255, 0.82) 40%,
+          rgba(255, 255, 255, 0.58) 66%,
+          rgba(255, 255, 255, 0.93) 90%,
+          #fff 100%
+        ),
+        var(--image-hero);
+      background-size: cover;
+      /* 30% keeps the skyline and the front of the truck in frame while
+         moving the truck's flat white side out from under the paragraph. */
+      background-position: center, 30% center;
+      background-repeat: no-repeat;
+      opacity: 1;
     }
     .hero-grid {
       grid-template-columns: 1fr;
