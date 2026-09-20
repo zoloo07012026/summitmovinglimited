@@ -203,6 +203,48 @@ const { servicesHead: head, servicesLinkLabel } = homePage;
   }
 
   @media (max-width: 1080px) {
+    /*
+     * Same problem the hero had. Once the cards stack, this section is close
+     * to 2000px tall, and `cover` on a box that shape scales the photo until a
+     * 390px viewport shows about a seventh of its width -- one blurred
+     * cardboard box. Combined with the near-opaque wash the section read as
+     * flat colour.
+     *
+     * So it becomes a band behind the heading instead, and the fade is done
+     * with a mask rather than by ending the wash on a colour: the mask takes
+     * the photo and the wash out together, which leaves no seam where the band
+     * stops and the section's own gradient takes over.
+     *
+     * The wash stays cool and heavy on purpose. The photo is warm beige and
+     * this palette is blue and navy; at much more than a quarter strength it
+     * stops being texture and starts fighting the cards.
+     */
+    .services-section::before {
+      inset: 0 0 auto;
+      height: 430px;
+      background:
+        linear-gradient(180deg, rgba(248, 251, 255, 0.88), rgba(248, 251, 255, 0.76)),
+        var(--image-services);
+      background-size: cover;
+      background-position: center, 50% 38%;
+      opacity: 1;
+      /* Eased in at the top as well, so the band does not meet the white of
+         the hero above it on a hard line. */
+      -webkit-mask-image: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.3) 0%,
+        #000 16%,
+        #000 52%,
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        180deg,
+        rgba(0, 0, 0, 0.3) 0%,
+        #000 16%,
+        #000 52%,
+        transparent 100%
+      );
+    }
     .services-grid {
       grid-template-columns: 1fr;
     }
