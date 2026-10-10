@@ -15,11 +15,7 @@
   ],
   "panel": {
     "text": "Core moving help plus practical support around packing, loading, supplies, and setup.",
-    "stats": [
-      { "label": "" },
-      { "label": "" },
-      { "label": "", "value": "" }
-    ]
+    "stats": []
   },
   "coreHead": {
     "eyebrow": "Moving",

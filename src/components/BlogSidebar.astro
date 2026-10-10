@@ -1,6 +1,6 @@
 ---
 import Icon from './Icon.astro';
-import { site, stat } from '../lib/site';
+import { site } from '../lib/site';
 import { blogPage } from '../lib/pages';
 import type { Post } from '../lib/blog';
 
@@ -67,12 +67,6 @@ const categories = site.blogCategories
       </div>
     )
   }
-
-  <div class="side-card rating">
-    <h3>{s.ratingHeading}</h3>
-    <strong>{stat(site.rating.value)}</strong>
-    <span>{s.ratingLabel}</span>
-  </div>
 
   {
     site.popularServices.length > 0 && (

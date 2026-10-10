@@ -138,6 +138,7 @@
   grid-template-columns: minmax(0, 1fr) minmax(360px, 430px);
 }
 .service-hero-card {
+  align-self: start;
   position: relative;
   z-index: 1;
   min-width: 0;
@@ -718,27 +719,6 @@
   color: var(--blue);
   font-size: 14px;
   font-weight: 800;
-}
-.rating {
-  text-align: center;
-}
-.rating .stars {
-  color: #fbbc04;
-  letter-spacing: 2px;
-  font-size: 18px;
-  margin-bottom: 8px;
-}
-.rating strong {
-  display: block;
-  font-size: 26px;
-  color: var(--navy);
-  line-height: 1;
-}
-.rating span {
-  display: block;
-  color: #56709b;
-  font-size: 13px;
-  margin-top: 6px;
 }
 .category-row {
   display: flex;
