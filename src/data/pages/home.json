@@ -72,10 +72,10 @@
       }
     ],
     "stats": [
-      { "label": "Successful Moves" },
-      { "label": "Average Rating" },
-      { "label": "Years in Business" },
-      { "label": "On-Time Delivery" }
+      { "label": "" },
+      { "label": "" },
+      { "label": "" },
+      { "label": "" }
     ]
   },
   "cta": {
