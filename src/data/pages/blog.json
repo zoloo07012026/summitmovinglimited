@@ -1,4 +1,4 @@
-{
+@{
   "seo": {
     "title": "Blog",
     "description": "Moving advice from Summit Moving Limited: Chicago-area move planning, long-distance timing, packing order, and how to compare quotes."
@@ -20,8 +20,8 @@
     "areasHeading": "Service Areas",
     "areasLinkLabel": "View all service areas ->",
     "areasLinkHref": "/services/",
-    "ratingHeading": "Customer Reviews",
-    "ratingLabel": "Average rating",
+    "ratingHeading": "",
+    "ratingLabel": "",
     "popularHeading": "Popular Services",
     "categoriesHeading": "Categories"
   },
