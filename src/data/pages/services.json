@@ -16,9 +16,9 @@
   "panel": {
     "text": "Core moving help plus practical support around packing, loading, supplies, and setup.",
     "stats": [
-      { "label": "Moves handled" },
-      { "label": "Average rating" },
-      { "label": "Emergency support", "value": "24/7" }
+      { "label": "" },
+      { "label": "" },
+      { "label": "", "value": "" }
     ]
   },
   "coreHead": {
